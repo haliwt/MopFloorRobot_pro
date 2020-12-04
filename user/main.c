@@ -164,17 +164,21 @@ void main(void)
 	while(1)
 	{
 	     KK= CheckHandsetIR();
-	     
+	     LedBlueON();
 		
-		#if 0
-		KK=ReadKey();
-	         if(KK==0)
-	         KK= CheckHandsetIR();
-	         CheckMode(KK);
-	         CheckGround();
-	         CheckRun();
+	
+		//KK=ReadKey();
+	         if(KK==0xC0){
+				 KK= CheckHandsetIR();
+				 CheckMode(KK);
+				 CheckGround();
+				 CheckRun();
+		     }
+			 else{
+			    KK=ReadKey();
+			 
+			 }
 		
-		#endif 
 		
 	}
 
