@@ -2,12 +2,12 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ÎÄ¼şËµÃ÷>
-version  : ¼ûÎÄ¼şÎ²¶Ë
+define   : <æ–‡ä»¶è¯´æ˜>
+version  : è§æ–‡ä»¶å°¾ç«¯
 ---------------------------------------------------------------------------
 */
 
-//È«¾Ö±äÁ¿ÉùÃ÷
+//å…¨å±€å˜é‡å£°æ˜
 #define  KAKA_AD_GB
 
 #ifdef   CodeC_Includes
@@ -20,106 +20,160 @@ version  : ¼ûÎÄ¼şÎ²¶Ë
 
 #endif
 /**
-  * @ËµÃ÷  	ÑÓÊ±º¯Êı
-  * @²ÎÊı  	fui_i : ÑÓÊ±Ê±¼ä
-  * @·µ»ØÖµ ÎŞ
-  * @×¢ 	Fcpu = 16MHz,fui_i = 1Ê±,ÑÓÊ±Ê±¼äÔ¼Îª2us
+  * @è¯´æ˜  	å»¶æ—¶å‡½æ•°
+  * @å‚æ•°  	fui_i : å»¶æ—¶æ—¶é—´
+  * @è¿”å›å€¼ æ— 
+  * @æ³¨ 	Fcpu = 16MHz,fui_i = 1æ—¶,å»¶æ—¶æ—¶é—´çº¦ä¸º2us
   */
 void Delay_2us(unsigned int fui_i)
 {
 	while(fui_i--);	
 }
+
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
+
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void InitADIO(void)
 {
-	P0M2 = 0x02;				        //P02ÉèÖÃÎªÄ£ÄâÊäÈë
-	P0M3 = 0x02;				        //P03ÉèÖÃÎªÄ£ÄâÊäÈë
-	P0M4 = 0x02;				        //P04ÉèÖÃÎªÄ£ÄâÊäÈë
-	P0M5 = 0x02;				        //P05ÉèÖÃÎªÄ£ÄâÊäÈë
-	P0M6 = 0x02;				        //P06ÉèÖÃÎªÄ£ÄâÊäÈë
-	P0M7 = 0x02;				        //P07ÉèÖÃÎªÄ£ÄâÊäÈë
-	P2M4 = 0x02;				        //P24ÉèÖÃÎªÄ£ÄâÊäÈë
-	P2M5 = 0x02;				        //P25ÉèÖÃÎªÄ£ÄâÊäÈë
+	P0M2 = 0x02;				        //P02è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---ç”µæ± ç”µå‹æ£€æµ‹ï¼ˆç”µæ± æœ¬ä½“ï¼‰
 
-	P0M1 = 0X80;
+	P0M3 = 0x02;				        //P03è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---IR_MID_WALL ä¸­é—´IR
+	P0M4 = 0x02;				        //P04è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---IR_L_WALL
+	P0M5 = 0x02;				        //P05è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---IR_R_WALL
 
-	LCurrentAD[0]=0;
-	LCurrentAD[2]=0;
-	LCurrentAD[4]=0;
-	LCurrentAD[6]=0;
-	RCurrentAD[0]=0;
-	RCurrentAD[2]=0;
-	RCurrentAD[4]=0;
-	RCurrentAD[6]=0;
+	P0M6 = 0x02;				        //P06è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---MOTOR_L_CURRENT_
+	P0M7 = 0x02;				        //P07è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---MOTOR_R_CURRENT
+	P2M5 = 0x02;				        //P25è®¾ç½®ä¸ºæ¨¡æ‹Ÿè¾“å…¥---æ´’æ°´MOTOR_CURRENT
+
+	P0M1 = 0X80;                        //IR_WALL_PW è¾“å‡ºGPIO 
 }
+/*************************************************************
+	*
+	*Function Name:void SeleADChanel(INT8U ADChanel)
+	*Function :
 
+	*Input Ref: ADChannel
+	*Return Ref: NO
+	*
+*************************************************************/
 void SeleADChanel(INT8U ADChanel)
 {
-	ADCC0 = 0x80;						//´ò¿ªADC×ª»»µçÔ´
-	ADCC1 = (ADChanel&0X0F);			//Ñ¡ÔñÍâ²¿Í¨µÀ0
-	ADCC2 = 0x4f;						//×ª»»½á¹û12Î»Êı¾İ£¬Êı¾İÓÒ¶ÔÆë£¬ADCÊ±ÖÓ16·ÖÆµ
+	ADCC0 = 0x81;						//æ‰“å¼€ADCè½¬æ¢ç”µæº
+	ADCC1 = (ADChanel&0X0F);			//é€‰æ‹©å¤–éƒ¨é€šé“0
+	ADCC2 = 0x4f;						//è½¬æ¢ç»“æœ12ä½æ•°æ®ï¼Œæ•°æ®å³å¯¹é½ï¼ŒADCæ—¶é’Ÿ16åˆ†é¢‘
 
 }
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
 
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void StartAD()
 {
 	ADCC0&=0XDF;
-	ADCC0 |= 0x40;					//Æô¶¯ADC×ª»»
+	ADCC0 |= 0x40;					//å¯åŠ¨ADCè½¬æ¢
 }
+/*************************************************************
+	*
+	*Function Name:void SetADINT(void)
+	*Function :
+
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void SetADINT(void)
 {
-    EADC = 1;                                   //Ê¹ÄÜADCÖĞ¶Ï
+    EADC = 1;                                   //ä½¿èƒ½ADCä¸­æ–­
     EA = 1;
 }
 
+/*************************************************************
+	*
+	*Function Name:void  SetAD(INT8U ADChanel)
+	*Function :
 
+	*Input Ref: ADChanel
+	*Return Ref: NO
+	*
+*************************************************************/
 void  SetAD(INT8U ADChanel)
 {
-  code INT8U ADCC[8]={2,3,4,5,6,7,12,13};
+  code INT8U ADCC[7]={2,3,4,5,6,7,13};
   SeleADChanel(ADCC[ADChanel]);
   SetADINT();
   StartAD();
 }
+/*************************************************************
+	*
+	*Function Name:void ReadAD5ms()
+	*Function :
+è¯»å–æ¥æ”¶IRçš„å€¼
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void ReadAD5ms()
 {
   static INT8U i=0;
-  static INT8U chanel=0;
-  static INT16U ADtemp[4];  
-  ADtemp[i]=ADCR;
+  static INT8U chanel=5;
+  static INT16U ADtemp[5];  
+  ADtemp[i]=ADCR; //ADC è½¬æ¢ç»“æœå¯„å­˜å™¨,ADCC[7]={2,3,4,5,6,7,13};
   i++;
-  if(i>3)
+  if(i>2)
   {
      i=0;
-	 AD5ms[chanel]= (ADtemp[3]+ADtemp[2])/2;
+	 AD5ms[chanel]= (ADtemp[1]+ADtemp[2])/2; // IR_MID_WALL + IR_L_WALL
 	 chanel++;
-	 if(chanel>7)
+	 if(chanel>6) //AN3 ,AN4, AN5 rIR input 
 	 {
+	
 	   if(ADCtl)
 	   {
-	   if(ADFlag)
-	   {
-		 P0_1 = 1;
-		 ADFlag=0;
-		 ADFlashFlag=1;
-	   }
-	  else
-	  {
-		 P0_1 = 0;
-		 ADFlag=1;
-		 ADFlashFlag=1;
+		   if(ADFlag)
+		   {
+			 P0_1 = 1; //IR_WALL_PW ,IR_POWER output +5V IR works
+			 ADFlag=0;
+			 ADFlashFlag=1;
+		   }
+		  else
+		  {
+			 P0_1 = 0; // IR don't works
+			 ADFlag=1;
+			 ADFlashFlag=1;
+		  }
 	  }
+	  else{
+	  	 P0_1 = 0;// IR don't works
 	  }
-	  else
-	  {
-	  	 P0_1 = 0;
-	  }
-	 chanel=0;
-	 }
+		//SBUF=(AD5ms[1]>>4);
+	    chanel=0;
+	}
   }
   else
   {
-  	 SetAD(chanel);
+  	 SetAD(chanel); //ADCè½¬æ¢
   }
 }
+/*************************************************************
+	*
+	*Function Name:INT8U ReadGroundDp(INT8U *p)
+	*Function :
+
+	*Input Ref: *P
+	*Return Ref: NO
+	*
+*************************************************************/
 INT8U ReadGroundDp(INT8U *p)
 {
   INT8U i;
@@ -146,19 +200,27 @@ INT8U ReadGroundDp(INT8U *p)
   
   return(temp/8);
 }
+/*************************************************************
+	*
+	*Function Name:void CheckGround()
+	*Function :
 
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckGround()
 {
  if(ADFlashFlag)
  {
    if(ADFlag)
    {
-   	   GroundAD[0][0]=(AD5ms[3]>>4);
-	   GroundAD[1][0]=(AD5ms[2]>>4);
-	   GroundAD[2][0]=(AD5ms[1]>>4);
+   	   GroundAD[0][0]=(AD5ms[2]>>4); // L_WALL //ADtemp[i]=ADCR; //ADC è½¬æ¢ç»“æœå¯„å­˜å™¨,ADCC[7]={2,3,4,5,6,7,13};
+	   GroundAD[1][0]=(AD5ms[1]>>4); //M_WALL IR_WALL åˆ¤æ–­å€¼
+	   GroundAD[2][0]=(AD5ms[3]>>4); //R_WALL 
 	   ADFlashFlag=0;
 	 //SBUF=GroundAD[0][0];
-    if(GroundAD[0][1]>GroundAD[0][0])
+    if(GroundAD[0][1]>GroundAD[0][0]) //
 	{
        GroundAD100Ms[0][ADTime]=GroundAD[0][1]-GroundAD[0][0];
 	}
@@ -190,12 +252,14 @@ void CheckGround()
 
    }
    //SBUF=AD5ms[5]/16;
-   	LCurrentAD[ADTime]=AD5ms[4];
-	RCurrentAD[ADTime]=AD5ms[5];
-	 
+   	LCurrentAD[ADTime]=AD5ms[4]; //L_speed
+	RCurrentAD[ADTime]=AD5ms[5]; //R_speed
+	  
    }
    else
    {
+
+
    	   GroundAD[0][1]=(AD5ms[3]>>4);
 	   GroundAD[1][1]=(AD5ms[2]>>4);
 	   GroundAD[2][1]=(AD5ms[1]>>4);
@@ -204,78 +268,87 @@ void CheckGround()
 
  }
 }
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
 
-void CheckFanCurrent()
-{
-  if(EdgeCollectDelayTime>5)
-  {
-    FanCurrent=(FanCurrent*9+((AD5ms[6]*11)/2))/10;
-    // 5000/4096/0.22
-  	EdgeCollectDelayTime=6;
-  }
-}
-
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckEdgeCurrent()
 {
-  
-  if(EdgeCollectDelayTime>5)
-  {
-     
-  	 static INT8U i=0;  
-     i++;
-     if(i>7)
-     i=0;
-     //EdgeCurrent+=(INT8U)AD5ms[7];
-     // 5000/4096/0.47
-     //EdgeCurrent-=	EdgeCurrent/10;
-     EdgeCurrent=(EdgeCurrent*9+((AD5ms[7]*2)/5))/10;
-     if(EdgeCurrent>0x0F)
-     EdgeCurrentCount++;
-     else 
-     {
-       if(EdgeCurrentCount>1)
-       EdgeCurrentCount--;
-     }
-	 EdgeCollectDelayTime=6;
-  }    
+
+ EdgeCurrent=(EdgeCurrent*9+((AD5ms[6]*13)/5))/10;
+ if(EdgeCurrent>0x80)
+ EdgeCurrentOverCount++;
+ else 
+ {
+   if(EdgeCurrentOverCount>1)
+     EdgeCurrentOverCount--;
+ }
+  if(EdgeCurrent<30)
+   EdgeCurrentLessCount++;
+  else
+ {
+   if(EdgeCurrentLessCount>1)
+     EdgeCurrentLessCount--;
+ }
 }
 
+/*************************************************************
+	*
+	*Function Name:void CheckLCurrent()
+	*Function :
 
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckLCurrent()
 {
  INT16U	LCurrentADAvg;
  LCurrentADAvg=(LCurrentAD[0]+LCurrentAD[2]+LCurrentAD[4]+LCurrentAD[6])/4;
  //SBUF= (INT8U)LCurrentADAvg;
- //LCurrent=(LCurrent*9+(LCurrentADAvg*11)/2)/10;
- LCurrent=(LCurrent+(LCurrentADAvg*11)/2)/2;
- //SBUF= LCurrent;
+ LCurrent=(LCurrent*9+(LCurrentADAvg*9.6))/10;
+				
 }
 void CheckRCurrent()
 {
  INT16U	RCurrentADAvg;
  RCurrentADAvg=(RCurrentAD[0]+RCurrentAD[2]+RCurrentAD[4]+RCurrentAD[6])/4;
 
- //RCurrent=(RCurrent*9+(RCurrentADAvg*11)/2)/10;
- RCurrent=(RCurrent+(RCurrentADAvg*11)/2)/2;
+ RCurrent=(RCurrent*9+(RCurrentADAvg*9.6))/10;
+ //5000/4096/0.1
  
 }
+/*************************************************************
+	*
+	*Function Name:void CheckEdgeCurrent()
+	*Function :
 
+	*Input Ref: NO
+	*Return Ref: NO
+	*
+*************************************************************/
 void CheckVoltage()
 {
-   Voltage=(Voltage*9+((AD5ms[0])/25)*6)/10;
-//   Voltage=840;
+   Voltage=(Voltage*19+(AD5ms[0]/2.56))/20;
+   //4000*4/4096/10
+
 }
 
 /***************************************************************************************
-  * @ËµÃ÷  	ADCÖĞ¶Ï·şÎñº¯Êı
-  *	@²ÎÊı	ÎŞ
-  * @·µ»ØÖµ ÎŞ
-  * @×¢		ÎŞ
+  * @è¯´æ˜  	ADCä¸­æ–­æœåŠ¡å‡½æ•°
+  *	@å‚æ•°	æ— 
+  * @è¿”å›å€¼ æ— 
+  * @æ³¨		æ— 
 ***************************************************************************************/
 void ADC_Rpt() interrupt ADC_VECTOR
 {
 
-    IE1 &=~ 0x40;                       //¹Ø±ÕADCÖĞ¶Ï
-    ADCC0 &=~ 0x20;						//Çå³ıADCÖĞ¶Ï±êÖ¾Î»
+    IE1 &=~ 0x40;                       //å…³é—­ADCä¸­æ–­
+    ADCC0 &=~ 0x20;						//æ¸…é™¤ADCä¸­æ–­æ ‡å¿—ä½
 
 } 

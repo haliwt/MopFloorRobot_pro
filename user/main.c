@@ -138,14 +138,14 @@ void main(void)
 	//Init_MotorSpeedIR();
 
 	ADCtl=1;
-	EdgeCollectDelayTime=0;
+
     Self_CheckingTime=0;
 	Self_Checking=0;
 
 
 	RunStep=0;
-	RCurrentMax=350;
-	LCurrentMax=350;
+
+	
 	LCurrent=0;
 	RCurrent=0;
 
@@ -249,7 +249,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	  // KeyRunTime++;
 	  CheckLCurrent();
 	  CheckRCurrent();
-	  CheckFanCurrent();
+
 	  CheckEdgeCurrent();
 
 
@@ -304,9 +304,7 @@ void TIMER1_Rpt(void) interrupt TIMER1_VECTOR
 	{
 	  t_1s=0;
 	  Self_CheckingTime++;
-//	  KeyclearTime++;
-	//  EdgeErrordelayTime++;
-	  EdgeCollectDelayTime++;
+
 	  RunSecond++;	 
 	//  GroundSecond++;
 	//  ImpSecond++;
