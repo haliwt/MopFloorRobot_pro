@@ -135,7 +135,7 @@ void main(void)
 
 
 
-	Init_MotorSpeedIR();
+	//Init_MotorSpeedIR();
 
 	ADCtl=1;
 	EdgeCollectDelayTime=0;

@@ -2,12 +2,12 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <Œƒº˛Àµ√˜>
-version  : º˚Œƒº˛Œ≤∂À
+define   : <Êñá‰ª∂ËØ¥Êòé>
+version  : ËßÅÊñá‰ª∂Â∞æÁ´Ø
 ---------------------------------------------------------------------------
 */
 
-//»´æ÷±‰¡ø…˘√˜
+//ÂÖ®Â±ÄÂèòÈáèÂ£∞Êòé
 #define  KAKA_Motor_GB
 
 #ifdef   CodeC_Includes
@@ -17,227 +17,233 @@ version  : º˚Œƒº˛Œ≤∂À
 #include "..\include\HC89F0541.h"
 #include "..\include\PJ_TypeRedefine.h"
 #include "LB_Motor.h"
-
+#include "LB_Run.h"
 #endif
+
+#define abs(x)  (x >0 ? x Ôºö-x)
 
 void Init_MotorSpeed()
 {
 
-	P3M4 = 0x68;			        	//P15…Ë÷√Œ™¥¯SMT…œ¿≠ ‰»Î
-	P3M5 = 0x68;			        	//P16…Ë÷√Œ™¥¯SMT…œ¿≠ ‰»Î
+	P3M4 = 0x68;			        	//P34ËÆæÁΩÆ‰∏∫Â∏¶SMT‰∏äÊãâËæìÂÖ•,Ê£ÄÊü•ÈÄüÂ∫¶È©¨Ëææ
+	P3M5 = 0x68;			        	//P35ËÆæÁΩÆ‰∏∫Â∏¶SMT‰∏äÊãâËæìÂÖ•,Ê£ÄÊµãÈÄüÂ∫¶È©¨Ëææ
 
 							//INT16	17
- 	PITS4 |= 0x0F;						
+ 	PITS4 = 0x0F;	       //Â§ñÈÉ®ÂØÑÂ≠òÂô®Ôºå‰∏≠Êñ≠ÁîµÂπ≥ÈÄâÊã©ÂØÑÂ≠òÂô®ÔºåÂèåÊ≤øËß¶Âèë‰∏≠Êñ≠					
 
-    PINTE2 |= 0x03;						// πƒ‹INT17 16
-	IE2 |= 0x01;						//¥Úø™INT8-17÷–∂œ
+    PINTE2 = 0x03;						//‰ΩøËÉΩINT17 16
+	IE2 |= 0x01;						//ÊâìÂºÄINT8-17‰∏≠Êñ≠
 	EA=1;
-
+	P3_4=1;  //motor Light speed dected
+	P3_5=1; //motor Right speed dected
+	PINTE1=0;
 }
-void Init_MotorSpeedIR()
-{
-	//P1M5 = 0x84;			        	//P15…Ë÷√Œ™
-}
-#if 0
-void MotorSpeedIRON()
-{
-  P1_5=0;
-}
-
-void MotorSpeedIROff()
-{
- // P1_5=1;
-}
-#endif 
+/**************************************************************
+	 *
+	 *Function Name:void InitMotorIO(void)
+	 *Function : È©¨ËææÈ©±Âä®GPIO ÂàùÂßãÂåñÂáΩÊï∞ 
+	 *Input Ref:NO
+	 *Retrun Ref:NO
+	 *
+**************************************************************/
 void InitMotorIO(void)
 {
 
-    P1M1 = 0xC2;                        //P11…Ë÷√Œ™Õ∆ÕÏ ‰≥ˆ
-    P1M2 = 0xC2;                        //P12…Ë÷√Œ™Õ∆ÕÏ ‰≥ˆ
-    P1M3 = 0xC2;                        //P13…Ë÷√Œ™Õ∆ÕÏ ‰≥ˆ
-    P1M4 = 0xC2;                        //P14…Ë÷√Œ™Õ∆ÕÏ ‰≥ˆ
-
+    P1M1 = 0xC2;                        //P11ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫
+    P1M2 = 0xC2;                        //P12ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫
+    P1M3 = 0xC2;                        //P13ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫
+    P1M4 = 0xC2;                        //P14ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫
+    P1M6 = 0xC2;                        //P14ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫ÔºåÈ©¨ËææÈÄüÂ∫¶ÊéßÂà∂IO
   P1_1=0;
   P1_2=0;
   P1_3=0;
   P1_4=0;
+  P1_6=0;
 
 }
-
+/**************************************************************
+	 *
+	 *Function Name:void InitFanEdgeIO(void)
+	 *Function : Âñ∑Ê∞¥È©¨ËææGPIO ÂàùÂßãÂåñÂáΩÊï∞ 
+	 *Input Ref:NO
+	 *Retrun Ref:NO
+	 *
+**************************************************************/
 void InitFanEdgeIO(void)
 {
-    P3M0 = 0xC2;                        //P34…Ë÷√Œ™Õ∆ÕÏ ‰≥ˆ
-    P3M1 = 0xC2;                        //P35…Ë÷√Œ™Õ∆ÕÏ ‰≥ˆ
-    P3_0=1;
-    P3_1=1;
-
-	PWM1_MAP = 0x30;					//PWM1Õ®µ¿”≥…‰P34ø⁄
-	PWM11_MAP = 0x31;					//PWM11Õ®µ¿”≥…‰P35ø⁄
-    PWM1C = 0x01;						//PWM1∏ﬂ”––ß£¨PWM11∏ﬂ”––ß£¨ ±÷”8∑÷∆µ 
-    PWMM |= 0x20;						//PWM1π§◊˜”⁄						
-
-	//∂¿¡¢ƒ£ Ωœ¬£¨PWM0∫ÕPWM01π≤”√“ª∏ˆ÷‹∆⁄ºƒ¥Ê∆˜
-	//PWM0µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊Èµƒ’ºø’±»ºƒ¥Ê∆˜
-	//PWM01µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊ÈµƒÀ¿«¯ºƒ¥Ê∆˜
-
-	//÷‹∆⁄º∆À„ 	= 0x03ff / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
-	//			= 0x03ff / (16000000 / 8)			
-	// 			= 1023   /2000000
-	//			= 511.5us		   		‘º1.955kHz
-
-	PWM1PH = 0x00;						//÷‹∆⁄∏ﬂ4Œª…Ë÷√Œ™0x03
-	PWM1PL = 0xff;						//÷‹∆⁄µÕ8Œª…Ë÷√Œ™0xFF
-
-	//’ºø’±»º∆À„= 0x0155 / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
-	//			= 0x0155 / (16000000 / 8)			
-	// 			= 341 	 / 2000000
-	//			= 170.5us		   ’ºø’±»Œ™ 170.5/511.5 = 33.3%
-
-	PWM1DH = 0x00;						//PWM1∏ﬂ4Œª’ºø’±»0x01
-	PWM1DL = 0x00;						//PWM1µÕ8Œª’ºø’±»0x55
-	PWM1DTH = 0x00;						//PWM11∏ﬂ4Œª’ºø’±»0x01
-	PWM1DTL = 0x00;						//PWM11µÕ8Œª’ºø’±»0x55
-	PWMEN |= 0x22;						// πƒ‹PWM1“‘º∞PWM11
-
+    P3M3 = 0xC2;                        //P33ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫,Âñ∑Ê∞¥È©¨ËææÔºå
+    P3_3 =0;
 }
 
-void SetFan(INT8U status)
-{
-   PWM1DTL = status;
-}
+
 void SetEdge(INT8U status)
 {
-   PWM1DL = status;
+   PWM1DL = status; //PWMÂç†Á©∫ÊØîÂØÑÂ≠òÂô®Ôºå‰Ωé8‰Ωç
 }
-
- void InitMotorLeftRetreat(void)
+/**************************************************************
+	 *
+	 *Function Name:void InitMotorRightForward(void)
+	 *Function : motor run forward 
+	 *
+	 *
+	 *
+**************************************************************/
+void InitMotorLeftForward(void)
 {
 
-    P1_3=0;
-    P1_4=0;
-	PWM0_MAP = 0x13;					//PWM0Õ®µ¿”≥…‰P14ø⁄
-    PWM0C = 0x00;						//PWM0∏ﬂ”––ß£¨PWM01∏ﬂ”––ß£¨ ±÷”8∑÷∆µ 
-    PWMM |= 0x10;						//PWM0π§◊˜”⁄ª•≤πƒ£ Ω						
+    P1_3=0; //IN2
+    P1_4=0; //IN1 //Left motor
+	///*
+	PWM0_MAP = 0x14;					//PWM0ÈÄöÈÅìÊò†Â∞ÑP14Âè£
+    PWM0C = 0x00;   //motor Âø´			//PWM0È´òÊúâÊïàÔºåPWM01È´òÊúâÊïàÔºå00: 1ÂàÜÈ¢ë 01ÔºöÊó∂Èíü8ÂàÜÈ¢ë 
+    PWMM |= 0x10;						//PWM0Â∑•‰Ωú‰∫é‰∫íË°•Ê®°Âºè						
 
-	//∂¿¡¢ƒ£ Ωœ¬£¨PWM0∫ÕPWM01π≤”√“ª∏ˆ÷‹∆⁄ºƒ¥Ê∆˜
-	//PWM0µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊Èµƒ’ºø’±»ºƒ¥Ê∆˜
-	//PWM01µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊ÈµƒÀ¿«¯ºƒ¥Ê∆˜
+	//Áã¨Á´ãÊ®°Âºè‰∏ãÔºåPWM0ÂíåPWM01ÂÖ±Áî®‰∏Ä‰∏™Âë®ÊúüÂØÑÂ≠òÂô®
+	//PWM0ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÂç†Á©∫ÊØîÂØÑÂ≠òÂô®
+	//PWM01ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÊ≠ªÂå∫ÂØÑÂ≠òÂô®
 
-	//÷‹∆⁄º∆À„ 	= 0x03ff / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
+	//Âë®ÊúüËÆ°ÁÆó 	= 0x03ff / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
 	//			= 0x03ff / (16000000 / 8)			
 	// 			= 1023   /2000000
-	//			= 511.5us		   		‘º1.955kHz
+	//			= 511.5us		   		Á∫¶1.955kHz
+	//      0x100 / 16000000 /1 = 1.6 * 10^(-5)us 6.25Mhz
 
-	PWM0PH = 0x01;						//÷‹∆⁄∏ﬂ4Œª…Ë÷√Œ™0x03
-	PWM0PL = 0x0;						//÷‹∆⁄µÕ8Œª…Ë÷√Œ™0xFF
+	PWM0PH = 0x01;						//Âë®ÊúüÈ´ò4‰ΩçËÆæÁΩÆ‰∏∫0x03 //Âë®ÊúüÊòØ256
+	PWM0PL = 0x0;						//Âë®Êúü‰Ωé8‰ΩçËÆæÁΩÆ‰∏∫0xFF
 
-	//’ºø’±»º∆À„= 0x0155 / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
+	//Âç†Á©∫ÊØîËÆ°ÁÆó= 0x0155 / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
 	//			= 0x0155 / (16000000 / 8)			
 	// 			= 341 	 / 2000000
-	//			= 170.5us		   ’ºø’±»Œ™ 170.5/511.5 = 33.3%
+	//			= 170.5us		   Âç†Á©∫ÊØî‰∏∫ 170.5/511.5 = 33.3%
 
-	PWM0DH = 0x00;						//PWM0∏ﬂ4Œª’ºø’±»0x01
-	PWM0DL = 0x60;						//PWM0µÕ8Œª’ºø’±»0x55
-	PWMEN |= 0x01;						// πƒ‹PWM0“‘º∞PWM01
-
+	PWM0DH = 0x00;		//left				//PWM0È´ò4‰ΩçÂç†Á©∫ÊØî0x01
+	PWM0DL = 0x60; //WT.EDIT //PWM0DL = 0x60;						//PWM0‰Ωé8‰ΩçÂç†Á©∫ÊØî0x55
+	PWMEN |= 0x01;						//‰ΩøËÉΩPWM0‰ª•ÂèäPWM01
+   //*/
+   //P1_4=1;
 }
-
- void InitMotorRightRetreat(void)
-{
-    P1_1=0;
-    P1_2=0;
-
-	PWM01_MAP = 0x12;					//PWM01Õ®µ¿”≥…‰P12ø⁄
-    PWM0C = 0x00;						//PWM0∏ﬂ”––ß£¨PWM01∏ﬂ”––ß£¨ ±÷”8∑÷∆µ 
-    PWMM |= 0x10;						//PWM0π§◊˜”⁄ª•≤πƒ£ Ω						
-
-	//∂¿¡¢ƒ£ Ωœ¬£¨PWM0∫ÕPWM01π≤”√“ª∏ˆ÷‹∆⁄ºƒ¥Ê∆˜
-	//PWM0µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊Èµƒ’ºø’±»ºƒ¥Ê∆˜
-	//PWM01µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊ÈµƒÀ¿«¯ºƒ¥Ê∆˜
-
-	//÷‹∆⁄º∆À„ 	= 0x03ff / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
-	//			= 0x03ff / (16000000 / 8)			
-	// 			= 1023   /2000000
-	//			= 511.5us		   		‘º1.955kHz
-
-	PWM0PH = 0x01;						//÷‹∆⁄∏ﬂ4Œª…Ë÷√Œ™0x03
-	PWM0PL = 0x0;						//÷‹∆⁄µÕ8Œª…Ë÷√Œ™0xFF
-
-	//’ºø’±»º∆À„= 0x0155 / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
-	//			= 0x0155 / (16000000 / 8)			
-	// 			= 341 	 / 2000000
-	//			= 170.5us		   ’ºø’±»Œ™ 170.5/511.5 = 33.3%
-
-
-	PWM0DTH = 0x00;						//PWM01∏ﬂ4Œª’ºø’±»0x01
-	PWM0DTL = 0x60;						//PWM01µÕ8Œª’ºø’±»0x55
-	PWMEN |= 0x10;						// πƒ‹PWM0“‘º∞PWM01
-
-}
-
- void InitMotorLeftForward(void)
-{
-
-    P1_3=0;
-    P1_4=0;
-	PWM0_MAP = 0x14;					//PWM0Õ®µ¿”≥…‰P14ø⁄
-    PWM0C = 0x00;						//PWM0∏ﬂ”––ß£¨PWM01∏ﬂ”––ß£¨ ±÷”8∑÷∆µ 
-    PWMM |= 0x10;						//PWM0π§◊˜”⁄ª•≤πƒ£ Ω						
-
-	//∂¿¡¢ƒ£ Ωœ¬£¨PWM0∫ÕPWM01π≤”√“ª∏ˆ÷‹∆⁄ºƒ¥Ê∆˜
-	//PWM0µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊Èµƒ’ºø’±»ºƒ¥Ê∆˜
-	//PWM01µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊ÈµƒÀ¿«¯ºƒ¥Ê∆˜
-
-	//÷‹∆⁄º∆À„ 	= 0x03ff / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
-	//			= 0x03ff / (16000000 / 8)			
-	// 			= 1023   /2000000
-	//			= 511.5us		   		‘º1.955kHz
-
-	PWM0PH = 0x01;						//÷‹∆⁄∏ﬂ4Œª…Ë÷√Œ™0x03
-	PWM0PL = 0x0;						//÷‹∆⁄µÕ8Œª…Ë÷√Œ™0xFF
-
-	//’ºø’±»º∆À„= 0x0155 / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
-	//			= 0x0155 / (16000000 / 8)			
-	// 			= 341 	 / 2000000
-	//			= 170.5us		   ’ºø’±»Œ™ 170.5/511.5 = 33.3%
-
-	PWM0DH = 0x00;						//PWM0∏ﬂ4Œª’ºø’±»0x01
-	PWM0DL = 0x60;						//PWM0µÕ8Œª’ºø’±»0x55
-	PWMEN |= 0x01;						// πƒ‹PWM0“‘º∞PWM01
-
-}
-
+/**************************************************************
+	*
+	*Function Name:void InitMotorRightForward(void)
+	*Function : motor run forward 
+	*
+	*
+	*
+**************************************************************/
  void InitMotorRightForward(void)
 {
-    P1_1=0;
-    P1_2=0;
+    P1_1=0;  //IN2 
+    P1_2=0; //IN1 
+	///*
+	PWM01_MAP = 0x11;					//PWM01ÈÄöÈÅìÊò†Â∞ÑP11Âè£
+    PWM0C = 0x00;						//PWM0È´òÊúâÊïàÔºåPWM01È´òÊúâÊïàÔºåÊó∂Èíü8ÂàÜÈ¢ë 
+    PWMM |= 0x10;						//PWM0Â∑•‰Ωú‰∫é‰∫íË°•Ê®°Âºè						
 
-	PWM01_MAP = 0x11;					//PWM01Õ®µ¿”≥…‰P12ø⁄
-    PWM0C = 0x00;						//PWM0∏ﬂ”––ß£¨PWM01∏ﬂ”––ß£¨ ±÷”8∑÷∆µ 
-    PWMM |= 0x10;						//PWM0π§◊˜”⁄ª•≤πƒ£ Ω						
+	//Áã¨Á´ãÊ®°Âºè‰∏ãÔºåPWM0ÂíåPWM01ÂÖ±Áî®‰∏Ä‰∏™Âë®ÊúüÂØÑÂ≠òÂô®
+	//PWM0ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÂç†Á©∫ÊØîÂØÑÂ≠òÂô®
+	//PWM01ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÊ≠ªÂå∫ÂØÑÂ≠òÂô®
 
-	//∂¿¡¢ƒ£ Ωœ¬£¨PWM0∫ÕPWM01π≤”√“ª∏ˆ÷‹∆⁄ºƒ¥Ê∆˜
-	//PWM0µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊Èµƒ’ºø’±»ºƒ¥Ê∆˜
-	//PWM01µƒ’ºø’±»µ˜Ω⁄ π”√			PWM0◊ÈµƒÀ¿«¯ºƒ¥Ê∆˜
-
-	//÷‹∆⁄º∆À„ 	= 0x03ff / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
+	//Âë®ÊúüËÆ°ÁÆó 	= 0x03ff / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
 	//			= 0x03ff / (16000000 / 8)			
 	// 			= 1023   /2000000
-	//			= 511.5us		   		‘º1.955kHz
+	//			= 511.5us		   		Á∫¶1.955kHz
 
-	PWM0PH = 0x01;						//÷‹∆⁄∏ﬂ4Œª…Ë÷√Œ™0x03
-	PWM0PL = 0x0;						//÷‹∆⁄µÕ8Œª…Ë÷√Œ™0xFF
+	PWM0PH = 0x01;						//Âë®ÊúüÈ´ò4‰ΩçËÆæÁΩÆ‰∏∫0x03
+	PWM0PL = 0x0;						//Âë®Êúü‰Ωé8‰ΩçËÆæÁΩÆ‰∏∫0xFF
 
-	//’ºø’±»º∆À„= 0x0155 / (Fosc / PWM∑÷∆µœµ ˝)		£®Foscº˚œµÕ≥ ±÷”≈‰÷√µƒ≤ø∑÷£©
+	//Âç†Á©∫ÊØîËÆ°ÁÆó= 0x0155 / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
 	//			= 0x0155 / (16000000 / 8)			
 	// 			= 341 	 / 2000000
-	//			= 170.5us		   ’ºø’±»Œ™ 170.5/511.5 = 33.3%
+	//			= 170.5us		   Âç†Á©∫ÊØî‰∏∫ 170.5/511.5 = 33.3%
 
 
-	PWM0DTH = 0x00;						//PWM01∏ﬂ4Œª’ºø’±»0x01
-	PWM0DTL = 0x60;						//PWM01µÕ8Œª’ºø’±»0x55
-	PWMEN |= 0x10;						// πƒ‹PWM0“‘º∞PWM01
+	PWM0DTH = 0x00;						//PWM01È´ò4‰ΩçÂç†Á©∫ÊØî0x01
+	PWM0DTL = 0x80 ; //WT.EDIT //0x60;						//PWM01‰Ωé8‰ΩçÂç†Á©∫ÊØî0x55
+	PWMEN |= 0x10;						//‰ΩøËÉΩPWM0‰ª•ÂèäPWM01
+   	//*/
+	//P1_1=1;
+}
+/**************************************************************
+	 *
+	 *Function Name:void InitMotorLeftRetreat(void)
+	 *Function : motor return run
+	 *
+	 *
+	 *
+**************************************************************/
+void InitMotorLeftRetreat(void)
+{
 
+    P1_3=0; //IN2 --return back
+    P1_4=0; //IN1
+	///*
+	PWM0_MAP = 0x13;					//PWM0ÈÄöÈÅìÊò†Â∞ÑP13Âè£
+    PWM0C = 0x00;						//PWM0È´òÊúâÊïàÔºåPWM01È´òÊúâÊïàÔºåÊó∂Èíü8ÂàÜÈ¢ë 
+    PWMM |= 0x10;						//PWM0Â∑•‰Ωú‰∫éÁã¨Á´ãÊ®°Âºè			
+
+	//Áã¨Á´ãÊ®°Âºè‰∏ãÔºåPWM0ÂíåPWM01ÂÖ±Áî®‰∏Ä‰∏™Âë®ÊúüÂØÑÂ≠òÂô®
+	//PWM0ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÂç†Á©∫ÊØîÂØÑÂ≠òÂô®
+	//PWM01ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÊ≠ªÂå∫ÂØÑÂ≠òÂô®
+
+	//Âë®ÊúüËÆ°ÁÆó 	= 0x03ff / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
+	//			= 0x03ff / (16000000 / 8)			
+	// 			= 1023   /2000000
+	//			= 511.5us		   		Á∫¶1.955kHz
+
+	PWM0PH = 0x01;						//Âë®ÊúüÈ´ò4‰ΩçËÆæÁΩÆ‰∏∫0x03
+	PWM0PL = 0x0;						//Âë®Êúü‰Ωé8‰ΩçËÆæÁΩÆ‰∏∫0xFF
+
+	//Âç†Á©∫ÊØîËÆ°ÁÆó= 0x0155 / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
+	//			= 0x0155 / (16000000 / 8)			
+	// 			= 341 	 / 2000000
+	//			= 170.5us		   Âç†Á©∫ÊØî‰∏∫ 170.5/511.5 = 33.3%
+
+	PWM0DH = 0x00;						//PWM0È´ò4‰ΩçÂç†Á©∫ÊØî0x01
+	PWM0DL = 0x60;						//PWM0‰Ωé8‰ΩçÂç†Á©∫ÊØî0x55
+	PWMEN |= 0x01;						//‰ΩøËÉΩPWM0‰ª•ÂèäPWM01
+	//*/
+	//P1_3=1; 
+}
+ /**************************************************************
+	  *
+	  *Function Name:void InitMotorRightRetreat(void)
+	  *Function : motor return run
+	  *
+	  *
+	  *
+**************************************************************/
+void InitMotorRightRetreat(void)
+{
+    P1_1=0;  //IN2 
+    P1_2=0; //IN1  ---forward 
+	///*
+	PWM01_MAP = 0x12;					//PWM01ÈÄöÈÅìÊò†Â∞ÑP12Âè£
+    PWM0C = 0x00;                      //WT.EDIT 2020.22.20//0x00; //PWM0È´òÊúâÊïàÔºåPWM01È´òÊúâÊïàÔºåÊó∂Èíü8ÂàÜÈ¢ë 
+    PWMM |= 0x10;						//PWM0Â∑•‰Ωú‰∫é‰∫íË°•Ê®°Âºè						
+
+	//Áã¨Á´ãÊ®°Âºè‰∏ãÔºåPWM0ÂíåPWM01ÂÖ±Áî®‰∏Ä‰∏™Âë®ÊúüÂØÑÂ≠òÂô®
+	//PWM0ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÂç†Á©∫ÊØîÂØÑÂ≠òÂô®
+	//PWM01ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÊ≠ªÂå∫ÂØÑÂ≠òÂô®
+
+	//Âë®ÊúüËÆ°ÁÆó 	= 0x03ff / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
+	//			= 0x03ff / (16000000 / 8)			
+	// 			= 1023   /2000000
+	//			= 511.5us		   		Á∫¶1.955kHz
+
+	PWM0PH = 0x01;						//Âë®ÊúüÈ´ò4‰ΩçËÆæÁΩÆ‰∏∫0x03
+	PWM0PL = 0x0;						//Âë®Êúü‰Ωé8‰ΩçËÆæÁΩÆ‰∏∫0xFF
+
+	//Âç†Á©∫ÊØîËÆ°ÁÆó= 0x0155 / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
+	//			= 0x0155 / (16000000 / 8)			
+	// 			= 341 	 / 2000000
+	//			= 170.5us		   Âç†Á©∫ÊØî‰∏∫ 170.5/511.5 = 33.3%
+
+
+	PWM0DTH = 0x00;						//PWM01È´ò4‰ΩçÂç†Á©∫ÊØî0x01
+	PWM0DTL = 0x60;						//PWM01‰Ωé8‰ΩçÂç†Á©∫ÊØî0x55
+	PWMEN |= 0x10;						//‰ΩøËÉΩPWM0‰ª•ÂèäPWM01
+	//*/
+	//P1_2=1;
 }
 
 
@@ -245,131 +251,186 @@ void SetEdge(INT8U status)
 void LeftStop()
 {
 
-   PWMEN &= 0xfe;
+   PWMEN &= 0xfE;
 
     P1_3=0;
     P1_4=0;
-	LeftMoveMotorData.MotorMode=0;
-
 }
 
 void RightStop()
 {
 
-   PWMEN &= 0xef;
+   PWMEN &= 0xeF;
     P1_1=0;
     P1_2=0;
 
-	RightMoveMotorData.MotorMode=0;
 }
-
+/**************************************************************
+	  *
+	  *Function Name:void WaterPumpStop(void)
+	  *Function : motor return run
+	  *
+	  *
+	  *
+**************************************************************/
+void WaterPumpStop(void)
+{
+   //PWMEN &= 0xe5;
+   P3_3 =0;
+}
+/**************************************************************
+	  *
+	  *Function Name:void WaterPumpStop(void)
+	  *Function : motor return run
+	  *
+	  *
+	  *
+**************************************************************/
 void AllStop()
 {
-   PWMEN &= 0xee;
+   PWMEN &= 0xEE;
     P1_1=0;
     P1_2=0;
     P1_3=0;
     P1_4=0;
-	LeftMoveMotorData.MotorMode=0;
-	RightMoveMotorData.MotorMode=0;
 }
 
-
-
- void ReadLeftPulsed(void)
+/**************************************************************
+	  *
+	  *Function Name:void ReadLeftPulsed(void)
+	  *Function : Ê£ÄÊµãÂ∑¶È©¨Ëææ-ËÑâÂÜ≤ ÂâçËøõÂíåÂêéÈÄÄ
+	  *
+	  *
+	  *
+**************************************************************/
+void ReadLeftPulsed(void)
 {
 
-	if((LeftMoveMotorData.MotorMode&0x03)==1)
+	if((LeftMoveMotorData.MotorMode&0x03)==1) //forword
 	{
 		LeftMoveMotorData.NowPulsed++;
-		if(LeftMoveMotorData.NowPulsed>=(LeftMoveMotorData.MovePulsed+80))
+		LmotorSpeedNum ++ ; //WT.EDIT
+
+		
+		/*
+		if(LeftMoveMotorData.NowPulsed>=(LeftMoveMotorData.MovePulsed+19))
 		{
-			LeftMoveMotorData.MovePulsed+=80;
+			LeftMoveMotorData.MovePulsed+=19;
 			LeftMoveMotorData.RunCm++;
 			if(LeftMoveMotorData.SetCm<=LeftMoveMotorData.RunCm)
 			{
 				LeftMoveMotorData.Flag=1;
+				LeftMoveMotorData.MotorMode=0;
 				LeftStop();
 			}
 		}
+	   */
 	}
-	else if((LeftMoveMotorData.MotorMode&0x03)==2)
+	else if((LeftMoveMotorData.MotorMode&0x03)==2) //retreat
 	{
 		LeftMoveMotorData.NowPulsed--;
-		if(LeftMoveMotorData.NowPulsed<=(LeftMoveMotorData.MovePulsed-80))
+		LmotorSpeedNum -- ; //WT.EDIT 
+		/*
+		if(LeftMoveMotorData.NowPulsed<=(LeftMoveMotorData.MovePulsed-19))
 		{
-			LeftMoveMotorData.MovePulsed-=80;
+			LeftMoveMotorData.MovePulsed-=19;
 			LeftMoveMotorData.RunCm--;
 			if(LeftMoveMotorData.SetCm>=LeftMoveMotorData.RunCm)
 			{
 				LeftMoveMotorData.Flag=1;
+				LeftMoveMotorData.MotorMode=0;
 				LeftStop();
 			}	
 				
 		}
+		*/
 	}
+
+	
 }
+/********************************************************************
+	*
+	*Function Name:void ReadRightPulsed(void)
+	*Function : Ê£ÄÊµãÂè≥È©¨ËææËÑâÂÜ≤ÔºåÂâçËøõÂíåÂêéÈÄÄ
+	*
+	*
+	*
+********************************************************************/
 void ReadRightPulsed(void)
 {
-	if((RightMoveMotorData.MotorMode&0x03)==1)
+	if((RightMoveMotorData.MotorMode&0x03)==1) //right motor RunMode =3
 	{
 		RightMoveMotorData.NowPulsed++;
-		if(RightMoveMotorData.NowPulsed>=(RightMoveMotorData.MovePulsed+80))
+		RmotorSpeedNum ++; //WT.EDIT 
+		/*
+		if(RightMoveMotorData.NowPulsed>=(RightMoveMotorData.MovePulsed+19))
 		{
 
 			RightMoveMotorData.RunCm++;
-			RightMoveMotorData.MovePulsed+=80;
+			RightMoveMotorData.MovePulsed+=19;
 			if(RightMoveMotorData.SetCm<=RightMoveMotorData.RunCm)
 			{
 				RightMoveMotorData.Flag=1;
+				RightMoveMotorData.MotorMode=0;
 				RightStop();
 			}
 		}
-
+		*/
 	}
-	else 
+	else if((RightMoveMotorData.MotorMode&0x03)==2) //WT.EDIT //retreat//else 
 	{
 		RightMoveMotorData.NowPulsed--;
-		if(RightMoveMotorData.NowPulsed<=(RightMoveMotorData.MovePulsed-80))
+		RmotorSpeedNum --; //WT.EDIT
+		/*
+		if(RightMoveMotorData.NowPulsed<=(RightMoveMotorData.MovePulsed-19))
 		{
 
 			RightMoveMotorData.RunCm--;
-			RightMoveMotorData.MovePulsed-=80;
+			RightMoveMotorData.MovePulsed-=19;
 
 			if(RightMoveMotorData.SetCm>=RightMoveMotorData.RunCm)
 			{
 				RightMoveMotorData.Flag=1;
+				RightMoveMotorData.MotorMode=0;
 				RightStop();
 			}
 		}
+		*/
 	}
 }
+/**************************************************************
+	  *
+	  *Function Name:void ReadLeftPulsed(void)
+	  *Function : motor return run
+	  *Input Ref: NO
+	  *Retrun Ref: NO
+	  *
+**************************************************************/
 void CheckLeftMotorSpeed(void)
 {
 
 	static INT8U i;
 
-	if(LeftMoveMotorData.MotorMode==1)
+	if(LeftMoveMotorData.MotorMode==1) // forword CW
 	{
 		if(LeftMoveMotorData.NowPulsed>=LeftMoveMotorData.LastPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.NowPulsed-LeftMoveMotorData.LastPulsed;
+		
 	}
-	else if(LeftMoveMotorData.MotorMode==2)
+	else if(LeftMoveMotorData.MotorMode==2) //retreat CCW
 	{
 		if(LeftMoveMotorData.LastPulsed>=LeftMoveMotorData.NowPulsed)
 			LeftMoveMotorData.NowSpeed[i]=LeftMoveMotorData.LastPulsed-LeftMoveMotorData.NowPulsed;
+		
 	}
-	else 
-	{
-	  LeftMoveMotorData.NowSpeed[i]=0;
-	}
+
 	i++;
-	if(i>1)
-	i=0;
+	///if(i>1)
+	//i=0;
 	LeftMoveMotorData.LastPulsed=LeftMoveMotorData.NowPulsed;
-	//if(i>1)
+	if(i>1)
 	{
-		//i=0;
+		i=0;
 		LeftMoveMotorData.AvgSpeedLast=LeftMoveMotorData.AvgSpeed;
 		LeftMoveMotorData.AvgSpeed=(LeftMoveMotorData.NowSpeed[0]+LeftMoveMotorData.NowSpeed[1])/2;
 
@@ -377,164 +438,153 @@ void CheckLeftMotorSpeed(void)
    	  	
 		if(LeftMoveMotorData.MotorMode<0x80)
 		{
-			if(0==LeftMoveMotorData.RunSpeed)
+			if(0==LeftMoveMotorData.RunSpeed) //ÂàπËΩ¶
 			{
 				LeftMoveMotorData.OutPWM=0;
 				LeftMoveMotorData.MotorMode|=0x80;
 			}
- 
-			else if(LeftMoveMotorData.AvgSpeed>LeftMoveMotorData.RunSpeed)
+ 			else if(LeftMoveMotorData.AvgSpeed>LeftMoveMotorData.RunSpeed)
 			{
 
 				 //if(LeftMoveMotorData.AvgSpeedLast<=LeftMoveMotorData.AvgSpeed)
-				   if((LeftMoveMotorData.AvgSpeed-3)>LeftMoveMotorData.RunSpeed) 
-					  LeftMoveMotorData.OutPWM-=4;
-				   else if((LeftMoveMotorData.AvgSpeed-2)>LeftMoveMotorData.RunSpeed)
-					  LeftMoveMotorData.OutPWM-=3;
-				   else if((LeftMoveMotorData.AvgSpeed-1)>LeftMoveMotorData.RunSpeed)
-					  LeftMoveMotorData.OutPWM-=2;
-				   else 
-					  LeftMoveMotorData.OutPWM--;
-					 if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;	
-			   /*
+				//	LeftMoveMotorData.OutPWM-=2;
+				//	if(LeftMoveMotorData.OutPWM<0X20)
+				//		LeftMoveMotorData.OutPWM=0X20;
+			   ///*
 				{
 
           if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>3)
 					{
-             LeftMoveMotorData.OutPWM-=4;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;
+	             		LeftMoveMotorData.OutPWM-=4;
+						if(LeftMoveMotorData.OutPWM<0X20)
+							LeftMoveMotorData.OutPWM=0X20;//WT.EDIT 
 					}					
 					else 
 					if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>2)
 					{
-             LeftMoveMotorData.OutPWM-=3;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;						
+	             		LeftMoveMotorData.OutPWM-=3;
+						if(LeftMoveMotorData.OutPWM<0X20)
+							LeftMoveMotorData.OutPWM=0X20;		//WT.EDIT 				
 					}					
 					else if((LeftMoveMotorData.AvgSpeed-LeftMoveMotorData.RunSpeed)>1)
 					{
 
 						LeftMoveMotorData.OutPWM-=2;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;						
+						if(LeftMoveMotorData.OutPWM<0X20)
+						LeftMoveMotorData.OutPWM=0X20;	//32	//WT.EDIT 				
 					}
 					else
 					{
 
 						{
 
-								LeftMoveMotorData.OutPWM--;
-					if(LeftMoveMotorData.OutPWM<0X20)
-						LeftMoveMotorData.OutPWM=0X20;								
+							LeftMoveMotorData.OutPWM--;
+							if(LeftMoveMotorData.OutPWM<0X20) //ÊúÄÂ∞èÂÄºËÆæÁΩÆ
+								LeftMoveMotorData.OutPWM=0X20;		//WT.EDIT 						
 					
 						}
 
 					}
          
 				}
-			  */
+			  //*/
 			}
 			else if(LeftMoveMotorData.AvgSpeed<LeftMoveMotorData.RunSpeed)
 			{
-				 //if(LeftMoveMotorData.AvgSpeedLast>=LeftMoveMotorData.AvgSpeed)
-				   if((LeftMoveMotorData.RunSpeed-3)>LeftMoveMotorData.AvgSpeed)
-					 LeftMoveMotorData.OutPWM+=4;
-				   else if((LeftMoveMotorData.RunSpeed-2)>LeftMoveMotorData.AvgSpeed)
-					LeftMoveMotorData.OutPWM+=3;		
-				   else if((LeftMoveMotorData.RunSpeed-1)>LeftMoveMotorData.AvgSpeed)
-					LeftMoveMotorData.OutPWM+=2;	
-				   else 
-					LeftMoveMotorData.OutPWM++;
-			  /*
+	
+			//		   LeftMoveMotorData.OutPWM+=2;
+			//		if(LeftMoveMotorData.OutPWM>0xfE)
+			//			LeftMoveMotorData.OutPWM=0xfE;	
+			  
 				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>3)
 				{
          
 			
-					if(LeftMoveMotorData.OutPWM>0xf0)
-						LeftMoveMotorData.OutPWM=0xf0;
+					if(LeftMoveMotorData.OutPWM>0xfb) //PWM_T =251 ;
+						LeftMoveMotorData.OutPWM=0xfb; //
 					else 
-                    LeftMoveMotorData.OutPWM+=4;	 					
+                    LeftMoveMotorData.OutPWM+=5;	//4 WT.EDIT  *************					
 				}
 				else
 				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
 				{
 
 				
-					if(LeftMoveMotorData.OutPWM>0xf0)
-						LeftMoveMotorData.OutPWM=0xf0;
+					if(LeftMoveMotorData.OutPWM>0xfb)
+						LeftMoveMotorData.OutPWM=0xfb;
 					else 
-            LeftMoveMotorData.OutPWM+=3;							
+            		LeftMoveMotorData.OutPWM+=3;							
 				}
 				else
 				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>1)
 				{
 
-					if(LeftMoveMotorData.OutPWM>0xf0)
-						LeftMoveMotorData.OutPWM=0xf0;
+					if(LeftMoveMotorData.OutPWM>0xfb)
+						LeftMoveMotorData.OutPWM=0xfb;
 					else 
-            LeftMoveMotorData.OutPWM+=2;						
+            			LeftMoveMotorData.OutPWM+=2;						
 				}
 				else
 				{
 					   LeftMoveMotorData.OutPWM++;
-					if(LeftMoveMotorData.OutPWM>0xf0)
-						LeftMoveMotorData.OutPWM=0xf0;	
+						if(LeftMoveMotorData.OutPWM>0xfb)//PWM_T =256 ;
+							LeftMoveMotorData.OutPWM=0xfb;	 //
 					
 
 				}
-		   */
-    
-
-
-			}
+		   }
 
 		}
 		else
 			LeftMoveMotorData.OutPWM=0;
     
 	   if(LeftMoveMotorData.MotorMode>0)
-		 PWM0DL=LeftMoveMotorData.OutPWM;
+		   PWM0DL=LeftMoveMotorData.OutPWM; //L motor duty = OutPWM= 0xfb(251)
 	   else
 		 LeftStop();
 	 	 
 	}
 
+	//AdjustSpeed(); //WT.EDIT 2020.11.11
+
 }
 
 
-
-
+/**************************************************************
+	  *
+	  *Function Name:void CheckRightMotorSpeed(void)
+	  *Function : motor return run
+	  *
+	  *
+	  *
+**************************************************************/
 void CheckRightMotorSpeed(void)
 {
-
+   
 	static INT8U i;
 
-	if(RightMoveMotorData.MotorMode==1)
+	if(RightMoveMotorData.MotorMode==1) //ÂâçËøõ
 	{
 		if(RightMoveMotorData.NowPulsed>=RightMoveMotorData.LastPulsed)
 			RightMoveMotorData.NowSpeed[i]=RightMoveMotorData.NowPulsed-RightMoveMotorData.LastPulsed;
+			
 	}
-	else if(RightMoveMotorData.MotorMode==2)
+	else if(RightMoveMotorData.MotorMode==2) //ÂêéÈÄÄ
 	{
 		if(RightMoveMotorData.LastPulsed>=RightMoveMotorData.NowPulsed)
 			RightMoveMotorData.NowSpeed[i]=RightMoveMotorData.LastPulsed-RightMoveMotorData.NowPulsed;
+			
 	}
-	else
-	{
-	   RightMoveMotorData.NowSpeed[i]=0;
-	}
+
 	i++;
-    if(i>1)
-	i=0;
+    //if(i>4)
+	//i=0;
 	RightMoveMotorData.LastPulsed=RightMoveMotorData.NowPulsed;
-	//if(i>1)
+	if(i>1)
 	{
-		//i=0;
+		i=0;
 		RightMoveMotorData.AvgSpeedLast=RightMoveMotorData.AvgSpeed;
 		RightMoveMotorData.AvgSpeed=(RightMoveMotorData.NowSpeed[0]+RightMoveMotorData.NowSpeed[1])/2;
-
 
     
 		if(RightMoveMotorData.MotorMode<0x80)
@@ -547,34 +597,85 @@ void CheckRightMotorSpeed(void)
 
 			else if(RightMoveMotorData.AvgSpeed>RightMoveMotorData.RunSpeed)
 			{
-				 //if(RightMoveMotorData.AvgSpeedLast<=RightMoveMotorData.AvgSpeed)
 
-				   if((RightMoveMotorData.AvgSpeed-3)>RightMoveMotorData.RunSpeed) 
-					  RightMoveMotorData.OutPWM-=4;
-				   else if((RightMoveMotorData.AvgSpeed-2)>RightMoveMotorData.RunSpeed)
-					  RightMoveMotorData.OutPWM-=3;
-				   else if((RightMoveMotorData.AvgSpeed-1)>RightMoveMotorData.RunSpeed)
-					  RightMoveMotorData.OutPWM-=2;
-				   else 
+				//	  RightMoveMotorData.OutPWM-=2;
+				//	 if(RightMoveMotorData.OutPWM<0X20)
+				//		RightMoveMotorData.OutPWM=0X20;	
+			
+				{
+					
+          if((RightMoveMotorData.AvgSpeed-RightMoveMotorData.RunSpeed)>3)
+			   {
+             		RightMoveMotorData.OutPWM-=4;
+					if(RightMoveMotorData.OutPWM<0X20)
+						RightMoveMotorData.OutPWM=0X20;						
+					}					
+					else 
+					if((RightMoveMotorData.AvgSpeed-RightMoveMotorData.RunSpeed)>2)
+					{
+
+						RightMoveMotorData.OutPWM-=3;
+					if(RightMoveMotorData.OutPWM<0X20)
+						RightMoveMotorData.OutPWM=0X20;//WT.EDIT		//RightMoveMotorData.OutPWM=0X20;						
+					}					
+					else if((RightMoveMotorData.AvgSpeed-RightMoveMotorData.RunSpeed)>1)
+					{
+
+						RightMoveMotorData.OutPWM-=2;
+					if(RightMoveMotorData.OutPWM<0X20)
+						RightMoveMotorData.OutPWM=0X20;//RightMoveMotorData.OutPWM=0X20;						
+					}
+					else
+					{
+
 					  RightMoveMotorData.OutPWM--;
 					 if(RightMoveMotorData.OutPWM<0X20)
-						RightMoveMotorData.OutPWM=0X20;	
+						RightMoveMotorData.OutPWM=0X20;//WT.EDIT //RightMoveMotorData.OutPWM=0X20;								
 
+					}
+
+			    }
+			  
 			}
 			else if(RightMoveMotorData.AvgSpeed<RightMoveMotorData.RunSpeed)
 			{
-				 //if(RightMoveMotorData.AvgSpeedLast>=RightMoveMotorData.AvgSpeed)
-				   if((RightMoveMotorData.RunSpeed-3)>RightMoveMotorData.AvgSpeed)
-					 RightMoveMotorData.OutPWM+=4;
-				   else if((RightMoveMotorData.RunSpeed-2)>RightMoveMotorData.AvgSpeed)
-					RightMoveMotorData.OutPWM+=3;		
-				   else if((RightMoveMotorData.RunSpeed-1)>RightMoveMotorData.AvgSpeed)
-					RightMoveMotorData.OutPWM+=2;	
-				   else 
-					RightMoveMotorData.OutPWM++;														
-                    if(RightMoveMotorData.OutPWM>0xfA)
-					RightMoveMotorData.OutPWM=0xfA;
+			
+				//	RightMoveMotorData.OutPWM+=2;					
+                  //  if(RightMoveMotorData.OutPWM>0xfE)
+				//	RightMoveMotorData.OutPWM=0xfE;
+			
+				if((RightMoveMotorData.RunSpeed-RightMoveMotorData.AvgSpeed)>3)
+				{
+ 					if(RightMoveMotorData.OutPWM>0xfb)
+						RightMoveMotorData.OutPWM=0xfb;
+					else
+						RightMoveMotorData.OutPWM+=4;//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
+				}
+				else
+				if((RightMoveMotorData.RunSpeed-RightMoveMotorData.AvgSpeed)>2)
+				{
 
+					if(RightMoveMotorData.OutPWM>0xfb)
+						RightMoveMotorData.OutPWM=0xfb;
+					else
+						RightMoveMotorData.OutPWM+=3;	//WT.EDIT 				
+				}
+				else
+				if((RightMoveMotorData.RunSpeed-RightMoveMotorData.AvgSpeed)>1)
+				{
+					if(RightMoveMotorData.OutPWM>0xfb)
+						RightMoveMotorData.OutPWM=0xfb;
+					else
+						RightMoveMotorData.OutPWM+=2;	//WT.EDIT 				
+				}
+				else
+				{
+					RightMoveMotorData.OutPWM++;					
+                    if(RightMoveMotorData.OutPWM>0xfb)
+					RightMoveMotorData.OutPWM=0xfb;
+
+				}
+			 
  
 			}
 
@@ -583,30 +684,38 @@ void CheckRightMotorSpeed(void)
 			RightMoveMotorData.OutPWM=0;
     
 	   if(RightMoveMotorData.MotorMode>0)
-		 PWM0DTL=RightMoveMotorData.OutPWM;
+		    PWM0DTL=RightMoveMotorData.OutPWM;   //R motor puty = outPWM.
 	   else
 		 RightStop();
 		 
 	}
 
+	
+
 }
 
-
-
- void SetXMotor(
-    INT8U Leftmotor,
+/**************************************************************
+	   *
+	   *Function Name:void SetXMotor()
+	   *Function : ÈÖçÁΩÆL,R motor puty of value 
+	   *Input Ref:1.leftmotor =1 Ê≠£‰º† ,2.leftStartSpeed,3leftEndSpeed,4.left slope
+	   *            leftmotor =2 ÂèçËΩ¨
+	   *Retrn Ref: NO
+	   *
+**************************************************************/
+void SetXMotor(
+    INT8U Leftmotor,   /* Â∑¶È©¨Ëææ ÊñπÂêë*/
     INT8U LeftStartSpeed,
     INT8U LeftEndSpeed,
 	INT8U LeftSlope,
-    INT8U Rightmotor,
+    INT8U Rightmotor,   /* Âè≥È©¨Ëææ   ÊñπÂêë */
     INT8U RightStartSpeed,
     INT8U RightEndSpeed,
 	INT8U RightSlope
 )
 {
 
-	LeftMoveMotorData.Flag=0;
-	RightMoveMotorData.Flag=0;
+
 	RightMoveMotorData.LastPulsed=0;
 	LeftMoveMotorData.LastPulsed=0;
 	RightMoveMotorData.NowPulsed=0;
@@ -616,63 +725,57 @@ void CheckRightMotorSpeed(void)
 	LeftMoveMotorData.MovePulsed=0;
 	LeftMoveMotorData.Slope=LeftSlope;
 	RightMoveMotorData.Slope=RightSlope;
-
+	LeftMoveMotorData.Flag=0;
+	RightMoveMotorData.Flag=0;
+	//LeftMoveMotorData.MotorMode=Leftmotor;
+	//RightMoveMotorData.MotorMode=Rightmotor;
 	if(LeftStartSpeed==0XFF)
 	{
 
 	}
-	else if(LeftStartSpeed==0XF8)
+	else if(LeftStartSpeed==0XF8) // 248 //PWM_T = 0x100 =256
 	{
-		if(LeftMoveMotorData.EndSpeed<20)
+		if(LeftMoveMotorData.EndSpeed<20) //ÊúÄÂ∞èÂÄº
 			LeftMoveMotorData.EndSpeed++;
 	}
-	else if(LeftStartSpeed==0XF0)
+	else if(LeftStartSpeed==0XF0) //240 //PWM_T = 0x100 =256
 	{
-		if(LeftMoveMotorData.EndSpeed>2)
+		if(LeftMoveMotorData.EndSpeed>2) //
 			LeftMoveMotorData.EndSpeed--;
 	}
 	else 
 	{
 
-		if(Leftmotor==1)
+		if(Leftmotor==1)  //CW ÁîµÊú∫ÊñπÂêë
 		{
-			if(LeftMoveMotorData.MotorMode!=Leftmotor)
+			//if(LeftMoveMotorData.MotorMode!=Leftmotor)
 			{
 				InitMotorLeftForward();
-				LeftMoveMotorData.OutPWM=0X40;
-				PWM0DL=LeftMoveMotorData.OutPWM;
+				LeftMoveMotorData.OutPWM=0Xa0; // 160 
+				PWM0DL=LeftMoveMotorData.OutPWM; // L motor puty = 0xa0/0x10=62.5%;
 
 
 			}
-
 			LeftMoveMotorData.MotorMode=Leftmotor;
 			LeftMoveMotorData.LastPulsed=0;
 			LeftMoveMotorData.NowPulsed=0;
-			LeftMoveMotorData.MotorMode=Leftmotor;
-			LeftMoveMotorData.LastPulsed=0;
-			LeftMoveMotorData.NowPulsed=0;			
-			LeftMoveMotorData.MovePulsed=0;
+
 		}
-		else if(Leftmotor==2)
+		else if(Leftmotor==2) //CCW È©¨ËææÊñπÂêë
 		{
-			if(LeftMoveMotorData.MotorMode!=Leftmotor)
+			//if(LeftMoveMotorData.MotorMode!=Leftmotor)
 			{
 				InitMotorLeftRetreat();
-				LeftMoveMotorData.OutPWM=0X40;
-				PWM0DL=LeftMoveMotorData.OutPWM;
+				LeftMoveMotorData.OutPWM=0Xa0;
+				PWM0DL=LeftMoveMotorData.OutPWM;//L motor puty = 0xa0/0x10 =62.5%;
 			}
-											  
 			LeftMoveMotorData.MotorMode=Leftmotor;
 			LeftMoveMotorData.LastPulsed=0;
-			LeftMoveMotorData.NowPulsed=0;
-			LeftMoveMotorData.MotorMode=Leftmotor;
-			LeftMoveMotorData.LastPulsed=0;
-			LeftMoveMotorData.NowPulsed=0;			
-			LeftMoveMotorData.MovePulsed=0;
+			LeftMoveMotorData.NowPulsed=0;	
+
 		}
 		else
 		{
-		LeftMoveMotorData.MotorMode=0;
 			LeftStop();
 		}
 		LeftMoveMotorData.RunSpeed=LeftStartSpeed;
@@ -680,23 +783,17 @@ void CheckRightMotorSpeed(void)
 
 	}
 
-
+    //Right motor run state value
 	if(RightStartSpeed==0XFF)
 	{
 
 	}
-	else if(RightStartSpeed==0XF8)
+	else if(RightStartSpeed==0XF8)//248
 	{
-			LeftMoveMotorData.MotorMode=Leftmotor;
-			LeftMoveMotorData.LastPulsed=0;
-			LeftMoveMotorData.NowPulsed=0;	
-			LeftMoveMotorData.MotorMode=Leftmotor;
-			LeftMoveMotorData.LastPulsed=0;
-			LeftMoveMotorData.NowPulsed=0;
 		if(RightMoveMotorData.EndSpeed<20)
 			RightMoveMotorData.EndSpeed++;
 	}
-	else if(RightStartSpeed==0XF0)
+	else if(RightStartSpeed==0XF0)//240
 	{
 		if(RightMoveMotorData.EndSpeed>2)
 			RightMoveMotorData.EndSpeed--;
@@ -704,150 +801,163 @@ void CheckRightMotorSpeed(void)
 	else 
 	{
 
-		if(Rightmotor==1)
+		if(Rightmotor==1) //motor CW 
 		{
-			if(RightMoveMotorData.MotorMode!=Rightmotor)
+			//if(RightMoveMotorData.MotorMode!=Rightmotor)
 			{
 				InitMotorRightForward();
-				RightMoveMotorData.OutPWM=0X40;
-				PWM0DTL=RightMoveMotorData.OutPWM;
+				RightMoveMotorData.OutPWM=0Xa0; //160  /motor PWM_T = 0x100 =256
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0/0x100 =62.5%;
 
 			}
-
-			RightMoveMotorData.MotorMode=Rightmotor;			
-			RightMoveMotorData.LastPulsed=0;
-			RightMoveMotorData.NowPulsed=0;			
+		
 			RightMoveMotorData.MotorMode=Rightmotor;
 			RightMoveMotorData.LastPulsed=0;
 			RightMoveMotorData.NowPulsed=0;
 			RightMoveMotorData.MovePulsed=0;
 		}
-		else if(Rightmotor==2)
+		else if(Rightmotor==2) //motor CCW 
 		{
-			if(RightMoveMotorData.MotorMode!=Rightmotor)
+			//if(RightMoveMotorData.MotorMode!=Rightmotor)
 			{
 				InitMotorRightRetreat();
-				RightMoveMotorData.OutPWM=0X40;
-				PWM0DTL=RightMoveMotorData.OutPWM;
+				RightMoveMotorData.OutPWM=0Xa0;
+				PWM0DTL=RightMoveMotorData.OutPWM; //R motor puty = 0xa0/0x10 = 62.5%;
 
 			}
-
-			RightMoveMotorData.MotorMode=Rightmotor;			
-			RightMoveMotorData.LastPulsed=0;
-			RightMoveMotorData.NowPulsed=0;			
+		
 			RightMoveMotorData.MotorMode=Rightmotor;
 			RightMoveMotorData.LastPulsed=0;
 			RightMoveMotorData.NowPulsed=0;
 			RightMoveMotorData.MovePulsed=0;
 		}
 		else
-		{
-		RightMoveMotorData.MotorMode=0;
 			RightStop();
-		}
+
 		RightMoveMotorData.RunSpeed=RightStartSpeed;
 		RightMoveMotorData.EndSpeed=RightEndSpeed;
 
 	}
+	
 
 }
 
-
-
-
-
-
-
-
+/**************************************************************
+	   *
+	   *Function Name:void AdjustSpeed()
+	   *Function : motor return run
+	   *Input Ref:NO
+	   *Retrn Ref: NO
+	   *
+**************************************************************/
+#if 0
 void AdjustSpeed()
 {
+ // INT16U tempV;
 
-	if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
-	{
-		LeftMoveMotorData.SlopeTime++;
-		if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
-		{
-			LeftMoveMotorData.SlopeTime=0;
-			if(LeftMoveMotorData.RunSpeed>0)
-				LeftMoveMotorData.RunSpeed--;
-		}
-	}
-	else if(LeftMoveMotorData.RunSpeed<LeftMoveMotorData.EndSpeed)
-	{
-		LeftMoveMotorData.SlopeTime++;
-		if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
-		{
-			LeftMoveMotorData.SlopeTime=0;
-			LeftMoveMotorData.RunSpeed++;
-		}
-	}
-	if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
-	{
-		RightMoveMotorData.SlopeTime++;
-		if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
-		{
-			RightMoveMotorData.SlopeTime=0;
-			if(RightMoveMotorData.RunSpeed>0)
-				RightMoveMotorData.RunSpeed--;
-		}
-	}
-	else if(RightMoveMotorData.RunSpeed<RightMoveMotorData.EndSpeed)
-	{
-		RightMoveMotorData.SlopeTime++;
-		if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
-		{
-			RightMoveMotorData.SlopeTime=0;
-			RightMoveMotorData.RunSpeed++;
-		}
-	}
-	///*
-	if(LeftMoveMotorData.RMode==1)
-	{
-	if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+100))
-	{
-	  RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-4;
-	}
-	else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+50))
-	{
-	  RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-3;
-	}
-	else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+30))
-	{
-	  RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-2;
-	}
-	else if(RightMoveMotorData.NowPulsed>(LeftMoveMotorData.NowPulsed+10))
-	{
-	 RightMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-1;
-	}
-	else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+100))
-	{
-	  LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-4;
-	}
-	else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+50))
-	{
-	  LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-3;
-	}
-	else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+30))
-	{
-	  LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-2;
-	}
-	else if(LeftMoveMotorData.NowPulsed>(RightMoveMotorData.NowPulsed+10))
-	{
-	  LeftMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed-1;
-	}
 
-    }
-	//*/
+  if(( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0) ||  ((RmotorSpeedNum - LmotorSpeedNum) <5&&((RmotorSpeedNum - LmotorSpeedNum)>=0))){
+       //Â∑¶ËΩÆ ÁßªÂä®Ë∑ùÁ¶ªÂ§ß‰∫é Âè≥ËΩÆÁßªÂä®Ë∑ùÁ¶ª
+      LmotorSpeedNum = 0;
+      RmotorSpeedNum=0;
+     // return ;
+  }
+  
+  if( (LmotorSpeedNum - RmotorSpeedNum) > 5 ){//Â∑¶ËæπÈÄüÂ∫¶Â§ß,
+       //Â∑¶ËΩÆ ÁßªÂä®Ë∑ùÁ¶ªÂ§ß‰∫é Âè≥ËΩÆÁßªÂä®Ë∑ùÁ¶ª
+       
+	   PWM0DH = 0x00;		//left motor
+	   PWM0DL=  0       ; //LeftMoveMotorData.OutPWM-200;
+  
+       PWM0DTH = 0x00; //right motor
+       PWM0DTL=RightMoveMotorData.OutPWM ++ ;
+  	  
+      
+  		if( (LmotorSpeedNum - RmotorSpeedNum) < 5 && (LmotorSpeedNum - RmotorSpeedNum) >=0){
+            LmotorSpeedNum = 0;
+            RmotorSpeedNum=0;	
+		   
+  	     }
+  }
+
+  if((RmotorSpeedNum - LmotorSpeedNum) > 5 ){ 
+       //Âè≥ËΩÆ ÁßªÂä®Ë∑ùÁ¶ªÂ§ß‰∫é Â∑¶ËΩÆÁßªÂä®Ë∑ùÁ¶ª
+        PWM0DTH = 0x00; //right motor
+        PWM0DTL=RightMoveMotorData.OutPWM --    ;
+	   
+	    PWM0DH = 0x00;		//left motor
+  		PWM0DL=LeftMoveMotorData.OutPWM++;
+  		if((RmotorSpeedNum - LmotorSpeedNum) < 5 && (RmotorSpeedNum - LmotorSpeedNum) >= 0) {
+           LmotorSpeedNum = 0;
+           RmotorSpeedNum=0; 	
+		 
+     }
+
+
+  }
+
+ #endif 
+/**********************DEFAULT***************************************/
+#if 1
+void AdjustSpeed()
+{
+  if(LeftMoveMotorData.RunSpeed>LeftMoveMotorData.EndSpeed)
+ {
+  LeftMoveMotorData.SlopeTime++;
+  if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
+  {
+   LeftMoveMotorData.SlopeTime=0;
+   if(LeftMoveMotorData.RunSpeed>0)
+    LeftMoveMotorData.RunSpeed=LeftMoveMotorData.RunSpeed-5;//LeftMoveMotorData.RunSpeed--;//WT.EDIT
+  }
+ }
+ else if(LeftMoveMotorData.RunSpeed<LeftMoveMotorData.EndSpeed)
+ {
+  LeftMoveMotorData.SlopeTime++;
+  if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
+  {
+    LeftMoveMotorData.SlopeTime=0;
+    //LeftMoveMotorData.RunSpeed++; //WT.EDIT 
+  }
+ }
+ if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
+ {
+  RightMoveMotorData.SlopeTime++;
+  if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
+  {
+   RightMoveMotorData.SlopeTime=0;
+   if(RightMoveMotorData.RunSpeed>0)
+    RightMoveMotorData.RunSpeed--;
+  }
+ }
+ else if(RightMoveMotorData.RunSpeed<RightMoveMotorData.EndSpeed)
+ {
+  RightMoveMotorData.SlopeTime++;
+  if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
+  {
+   RightMoveMotorData.SlopeTime=0;
+   RightMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed +5;//WT.EDIT //RightMoveMotorData.RunSpeed++;
+  }
+ }
 
 }
+#endif 
+/**************************************************************
+	   *
+	   *Function Name:void SetMotorcm(INT8U mode,INT16U Setcm)
+	   *Function : È©¨ËææÁßªÂä®ÁöÑË∑ùÁ¶ªËÆæÁΩÆ
+	   *Input Ref: mode,Setcm
+	   *Retrn Ref: NO
+	   *
+**************************************************************/
 void SetMotorcm(INT8U mode,INT16U Setcm)
 {
   switch(mode)
   {
      case 1:
 	 {
-	   LeftMoveMotorData.RMode=1;
 	   LeftMoveMotorData.RunCm=0;
+	   
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=Setcm;
        RightMoveMotorData.SetCm=Setcm;
@@ -855,8 +965,10 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 2:
 	 {
-	   LeftMoveMotorData.RMode=2;
+
 	   LeftMoveMotorData.RunCm=0;
+
+	   
        RightMoveMotorData.RunCm=0;
        LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm;
        RightMoveMotorData.SetCm=RightMoveMotorData.RunCm-Setcm;
@@ -864,31 +976,69 @@ void SetMotorcm(INT8U mode,INT16U Setcm)
 	 break;
 	 case 3:
 	 {
-	   LeftMoveMotorData.RMode=3;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
-       LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm/6.3;
-       RightMoveMotorData.SetCm=Setcm/6.3;
+       LeftMoveMotorData.SetCm=LeftMoveMotorData.RunCm-Setcm/6;
+       RightMoveMotorData.SetCm=Setcm/6;
      }
 	 break;
 	 case 4:
 	 {
-	   LeftMoveMotorData.RMode=4;
 	   LeftMoveMotorData.RunCm=0;
        RightMoveMotorData.RunCm=0;
-       LeftMoveMotorData.SetCm=Setcm/6.3;
-       RightMoveMotorData.SetCm=RightMoveMotorData.RunCm-Setcm/6.3;
-     }
-	 break;
-     case 5:
-	 {
-	   LeftMoveMotorData.RMode=5;
-	   LeftMoveMotorData.RunCm=0;
-       RightMoveMotorData.RunCm=0;
-       LeftMoveMotorData.SetCm=Setcm;
-       RightMoveMotorData.SetCm=Setcm;
+       LeftMoveMotorData.SetCm=Setcm/6;
+       RightMoveMotorData.SetCm=RightMoveMotorData.RunCm-Setcm/6;
      }
 	 break;
   }
 }
+/**************************************************************
+	   *
+	   *Function Name:void WaterPump()
+	   *Function : Ê∞¥Ê≥µÁîµÊú∫Â∑•‰Ωú
+	   *Input Ref: NO
+	   *Retrn Ref: NO
+	   *
+**************************************************************/
+void WaterPump(void)
+{
+   P3M3 = 0xC2;                        //P33ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫,Âñ∑Ê∞¥È©¨ËææÔºå	
+   P3_3=1; //Âñ∑Ê∞¥
+	/*
+   P3M3 = 0xC2;                        //P33ËÆæÁΩÆ‰∏∫Êé®ÊåΩËæìÂá∫,Âñ∑Ê∞¥È©¨ËææÔºå
+  // P3_3=1; //Âñ∑Ê∞¥
+  
+   PWM1_MAP = 0x33;					//PWM1ÈÄöÈÅìÊò†Â∞ÑP33Âè£
+
+    PWM1C = 0x01;//WT.EDIT	//0x00					//PWM1È´òÊúâÊïàÔºåPWM11È´òÊúâÊïàÔºåÊó∂Èíü8ÂàÜÈ¢ë 
+    PWMM |= 0x10;						//PWM1Â∑•‰Ωú‰∫é						
+
+	//Áã¨Á´ãÊ®°Âºè‰∏ãÔºåPWM0ÂíåPWM01ÂÖ±Áî®‰∏Ä‰∏™Âë®ÊúüÂØÑÂ≠òÂô®
+	//PWM0ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÂç†Á©∫ÊØîÂØÑÂ≠òÂô®
+	//PWM01ÁöÑÂç†Á©∫ÊØîË∞ÉËäÇ‰ΩøÁî®			PWM0ÁªÑÁöÑÊ≠ªÂå∫ÂØÑÂ≠òÂô®
+
+	//Âë®ÊúüËÆ°ÁÆó 	= 0x03ff / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
+	//			= 0x03ff / (16000000 / 8)			
+	// 			= 1023   /2000000
+	//			= 511.5us		   		Á∫¶1.955kHz
+
+	PWM1PH = 0x03;						//Âë®ÊúüÈ´ò4‰ΩçËÆæÁΩÆ‰∏∫0x03
+	PWM1PL = 0xff;						//Âë®Êúü‰Ωé8‰ΩçËÆæÁΩÆ‰∏∫0xFF
+
+	//Âç†Á©∫ÊØîËÆ°ÁÆó= 0x0155 / (Fosc / PWMÂàÜÈ¢ëÁ≥ªÊï∞)		ÔºàFoscËßÅÁ≥ªÁªüÊó∂ÈíüÈÖçÁΩÆÁöÑÈÉ®ÂàÜÔºâ
+	//			= 0x0155 / (16000000 / 8)			
+	// 			= 341 	 / 2000000
+	//			= 170.5us		   Âç†Á©∫ÊØî‰∏∫ 170.5/511.5 = 33.3%
+
+	PWM1DH = 0x01;						//PWM1È´ò4‰ΩçÂç†Á©∫ÊØî0x01
+	PWM1DL = 0xff;	//WT.EDIT					//PWM1‰Ωé8‰ΩçÂç†Á©∫ÊØî0x55													    
+
+	PWMEN |= 0x02;						//‰ΩøËÉΩPWM1‰ª•ÂèäPWM11
+*/
+    
+
+}
+
+
+
 

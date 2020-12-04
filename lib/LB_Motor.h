@@ -2,8 +2,8 @@
 
 ---------- file information -----------------------------------------------
 file name: 
-define   : <ÎÄ¼şËµÃ÷>
-version  : ¼ûÎÄ¼şÎ²¶Ë
+define   : <æ–‡ä»¶è¯´æ˜>
+version  : è§æ–‡ä»¶å°¾ç«¯
 ---------------------------------------------------------------------------
 */
 #ifndef  LB_Motor_h
@@ -21,7 +21,7 @@ version  : ¼ûÎÄ¼şÎ²¶Ë
 #endif
 
 
-//È«¾Ö±äÁ¿ÉùÃ÷
+//å…¨å±€å˜é‡å£°æ˜
 #ifdef  KAKA_Motor_GB
 #define KAKA_Motor_EXT
 #else
@@ -31,35 +31,31 @@ version  : ¼ûÎÄ¼şÎ²¶Ë
 
 typedef struct
 {
-	INT8U   RMode;	
+	
 	INT8U   AvgSpeed;
 	INT8U   AvgSpeedLast;
-	INT8U   MotorMode;                 //?¨ª¡ä??¡ê¨º?,¨ª¡ê?1,?¡ã??,o¨®¨ª?
-	INT8U   NowSpeed[5];                  //?¨ª¡ä?¦Ì¡À?¡ã?¨´?¨¨
-	INT8U   RunSpeed;                  //?¨ª¡ä???DD?¨´?¨¨	
-	INT8U   EndSpeed;                  //?¨ª¡ä???DD?¨´?¨¨	
+	INT8U   RMode ;
+	INT8U   MotorMode;                 //?Ã­â€²??ï¿¡Ãª?,Ã­ï¿¡?1,?Â°??,oÃ³Ã­?
+	INT8U   NowSpeed[5];                  //?Ã­â€²?Î¼Â±?Â°?Ã¹?Ã¨
+	INT8U   RunSpeed;                  //?Ã­â€²???DD?Ã¹?Ã¨	
+	INT8U   EndSpeed;                  //?Ã­â€²???DD?Ã¹?Ã¨	
 	INT8U   Slope;	
 	INT8U   SlopeTime;		
-	INT8U   OutPWMFlag;	
-	INT32S  NowPulsed;	               //¦Ì¡À?¡ã??3?¨ºy
+	INT32S  NowPulsed;	               //Î¼Â±?Â°??3?Ãªy
 	INT32S  LastPulsed;
-	INT32S  MovePulsed;	               //¨¦?¡ä???3?¨ºy
+	INT32S  MovePulsed;	               //Ã©?â€²???3?Ãªy
 
+	INT32S   RunPulsed;	               //?Â°??oÃ³Ã­?Â±ï¿¡â€²?Î¼???3?Ãªy	
 	INT8U   Flag;
 	INT16S  RunCm;	
 	INT16S  SetCm;		
-
-	INT16U  OutPWM;                    //?¨ª¡ä??y?¡¥PWM
-
+	INT16U  OutPWM;                    //?Ã­â€²??y?Ë‰PWM
+	INT8U  Current;	
 } MoveMotorData;
 
-KAKA_Motor_EXT MoveMotorData idata LeftMoveMotorData;
-KAKA_Motor_EXT MoveMotorData idata RightMoveMotorData;
+KAKA_Motor_EXT MoveMotorData outdata LeftMoveMotorData;
+KAKA_Motor_EXT MoveMotorData outdata RightMoveMotorData;
 KAKA_Motor_EXT void Init_MotorSpeed();
-KAKA_Motor_EXT void Init_MotorSpeedIR();
-
-KAKA_Motor_EXT void MotorSpeedIRON();
-KAKA_Motor_EXT void MotorSpeedIROff();
 KAKA_Motor_EXT void InitMotorIO(void);
 KAKA_Motor_EXT void InitMotorForward(void);
 KAKA_Motor_EXT void InitFanEdgeIO(void);
@@ -89,4 +85,7 @@ KAKA_Motor_EXT  void SetXMotor(
 );
 KAKA_Motor_EXT  void AdjustSpeed();
 KAKA_Motor_EXT  void SetMotorcm(INT8U mode,INT16U Setcm);
+KAKA_Motor_EXT  void WaterPump(); //WT.EDIT 2020.11.10
+KAKA_Motor_EXT  void WaterPumpStop(void); //WT.EDIT
+
 #endif
