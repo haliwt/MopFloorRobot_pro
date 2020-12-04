@@ -44,7 +44,7 @@ void  CheckRun()
 			//SetXMotor(1,20,40,1,1,20,40,1);
 			
 			//SetXMotor(1,20,40,1,1,20,40,1);//1--??????SetXMotor(1,20,25,1,1,20,40,1);
-			SetXMotor(1,20,160,1,1,20,160,1);//2--??????
+			SetXMotor(2,20,160,2,2,20,160,2);//2--forward modiyf line run 2020.12.04
 			SetMotorcm(1,5000);
 			RunStep=2;
 			RunMs=0;
@@ -64,7 +64,7 @@ void  CheckRun()
 			{
 				//SetXMotor(1,20,40,1,1,20,40,1);  //???
 				//SetXMotor(1,20,40,1,1,20,40,1);//1--??????SetXMotor(1,20,35,1,1,20,40,1);
-				SetXMotor(1,20,160,1,1,20,160,1);//2--??????
+				SetXMotor(2,20,160,2,2,20,160,2);//2--forward line
 				SetMotorcm(1,5000);			
 			}
 			
@@ -144,7 +144,7 @@ void  CheckRun()
 					RunStep=2;//??? //RunStep=12;
 				  // SetXMotor(1,20,40,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
                   // SetXMotor(1,20,35,1,1,20,40,1);//1--??????
-                   SetXMotor(1,20,160,1,1,20,160,1);//2--??????
+                   SetXMotor(2,20,160,2,2,20,160,2);//2--forward line 
 				   SetMotorcm(1,5000);				
 				}
 
@@ -170,7 +170,7 @@ void  CheckRun()
 			    RunStep=2; 
 				//SetXMotor(1,20,40,1,1,20,60,1);//SetXMotor(1,20,25,1,1,20,40,1);//SetXMotor(1,20,25,1,1,20,40,1); //???
 				// SetXMotor(1,20,35,1,1,20,40,1);//1--??????
-				SetXMotor(1,20,160,1,1,20,160,1);//2--??????
+				SetXMotor(2,20,160,2,2,20,160,2);//2--forward line 
 				SetMotorcm(1,5000);		   
 		   }
 		 }

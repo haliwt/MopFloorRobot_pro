@@ -138,24 +138,12 @@ void main(void)
 	//Init_MotorSpeedIR();
 
 	ADCtl=1;
-
-    Self_CheckingTime=0;
-	Self_Checking=0;
-
-
 	RunStep=0;
-
-	
 	LCurrent=0;
 	RCurrent=0;
-
-	
 	EdgeCurrent=0;
 	FanCurrent=0;
 	EdgeCurrentCount=0;
-
-	
-
 	Mode=1;
 	Step=0;
 
@@ -165,17 +153,14 @@ void main(void)
 	{
 	     KK= CheckHandsetIR();
 	     LedBlueON();
-		
-	
-		//KK=ReadKey();
-	         if(KK==0xC0){
+		 if(KK==0xC0){
 				 KK= CheckHandsetIR();
 				 CheckMode(KK);
 				 CheckGround();
 				 CheckRun();
 		     }
 			 else{
-			    KK=ReadKey();
+			     KK=ReadKey();
 				 CheckMode(KK);
 				 CheckGround();
 				 CheckRun(); 
