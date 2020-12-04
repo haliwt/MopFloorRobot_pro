@@ -176,6 +176,9 @@ void main(void)
 		     }
 			 else{
 			    KK=ReadKey();
+				 CheckMode(KK);
+				 CheckGround();
+				 CheckRun(); 
 			 
 			 }
 		
