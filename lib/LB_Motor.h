@@ -51,6 +51,8 @@ typedef struct
 	INT16S  SetCm;		
 	INT16U  OutPWM;                    //?í′??y?ˉPWM
 	INT8U  Current;	
+	INT8U  LeftAdjustWheel;
+	INT8U  RightAdjustWheel;
 } MoveMotorData;
 
 KAKA_Motor_EXT MoveMotorData outdata LeftMoveMotorData;

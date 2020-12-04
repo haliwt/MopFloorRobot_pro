@@ -208,6 +208,11 @@ void CheckMode(INT8U Key)
 	LedBlueON();
 	LedRedON();
   }
+ else if(Key==4){
+	 
+	 Mode = 41;
+	 
+ }
  else if(Key==1)
   {
     
@@ -560,10 +565,17 @@ void CheckMode(INT8U Key)
 			CheckGround();
 			SelfChecking();
 		  }
-		
-		
-
-
+		break;
+	case 41:
+		 if(RunMs > 20)
+		   {
+			
+			    RunMs=0;
+			    RunStep=0;
+			    SetXMotor(2,20,160,2,2,20,160,2);//2--forward line 
+				SetMotorcm(1,65535);		   
+		   }
+	
 	break;
 
   }

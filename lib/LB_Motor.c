@@ -502,8 +502,11 @@ void CheckLeftMotorSpeed(void)
 			
 					if(LeftMoveMotorData.OutPWM>0xfb) //PWM_T =251 ;
 						LeftMoveMotorData.OutPWM=0xfb; //
-					else 
-                    LeftMoveMotorData.OutPWM+=5;	//4 WT.EDIT  *************					
+					else{ 
+
+					 LeftMoveMotorData.OutPWM= LeftMoveMotorData.OutPWM+(LeftMoveMotorData.LeftAdjustWheel+ 4);	//4 WT.EDIT  *************					
+					 //SBUF =LeftMoveMotorData.OutPWM ;
+					}
 				}
 				else
 				if((LeftMoveMotorData.RunSpeed-LeftMoveMotorData.AvgSpeed)>2)
@@ -648,9 +651,11 @@ void CheckRightMotorSpeed(void)
 				{
  					if(RightMoveMotorData.OutPWM>0xfb)
 						RightMoveMotorData.OutPWM=0xfb;
-					else
-						RightMoveMotorData.OutPWM+=4;//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
-				}
+					else{
+						RightMoveMotorData.OutPWM=RightMoveMotorData.OutPWM+(LeftMoveMotorData.RightAdjustWheel+4);//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
+						//SBUF = RightMoveMotorData.OutPWM;
+					   }
+					}
 				else
 				if((RightMoveMotorData.RunSpeed-RightMoveMotorData.AvgSpeed)>2)
 				{
@@ -917,7 +922,7 @@ void AdjustSpeed()
   if(LeftMoveMotorData.SlopeTime>LeftMoveMotorData.Slope)
   {
     LeftMoveMotorData.SlopeTime=0;
-    //LeftMoveMotorData.RunSpeed++; //WT.EDIT 
+    LeftMoveMotorData.RunSpeed++; //WT.EDIT 
   }
  }
  if(RightMoveMotorData.RunSpeed>RightMoveMotorData.EndSpeed)
@@ -936,7 +941,7 @@ void AdjustSpeed()
   if(RightMoveMotorData.SlopeTime>RightMoveMotorData.Slope)
   {
    RightMoveMotorData.SlopeTime=0;
-   RightMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed +5;//WT.EDIT //RightMoveMotorData.RunSpeed++;
+   RightMoveMotorData.RunSpeed++;//RightMoveMotorData.RunSpeed=RightMoveMotorData.RunSpeed +5;//WT.EDIT //RightMoveMotorData.RunSpeed++;
   }
  }
 

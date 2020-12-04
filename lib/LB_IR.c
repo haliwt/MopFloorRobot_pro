@@ -23,6 +23,8 @@ version  : ¼ûÎÄ¼þÎ²¶Ë
 
 #endif
 
+INT8U irValue;
+
 void Init_IR()
 {
 
@@ -154,6 +156,27 @@ void CheckXReadIR(ReadIRByte *P)
 						ReadIR_cnt=0;
 						FristCodeflag=0;
 						P->ReadIRFlag=3;
+						if(P->ReadIR[0]==0x01){
+							if(P->ReadIR[1]==0xFE)
+						    {
+							
+							if(P->ReadIR[2]==0xC0){
+								   RightMoveMotorData.LeftAdjustWheel++;
+								  if(RightMoveMotorData.LeftAdjustWheel >5)
+									  RightMoveMotorData.LeftAdjustWheel=0;
+								      irValue =4; //right 
+								      
+							}
+							else if(P->ReadIR[2]==0x80){
+								  RightMoveMotorData.RightAdjustWheel++;
+								  if(RightMoveMotorData.RightAdjustWheel>5)
+									  RightMoveMotorData.RightAdjustWheel=0;
+								      irValue =4 ; //left 
+								   
+							} 
+						}
+						}   
+						
 
 
 					 }
@@ -188,23 +211,9 @@ INT8U CheckHandsetIR()
 
    CheckXReadIR(&Remote1_ReadIR);
 
-   if(Remote1_ReadIR.ReadIRFlag==3)
-   {
-    
-      Remote1_ReadIR.ReadIRFlag=0;
-	   Usart1Send[0]=4;
-	                    Usart1Send[1]=Remote1_ReadIR.ReadIR[0];
-						Usart1Send[2]=Remote1_ReadIR.ReadIR[1];
-						Usart1Send[3]=Remote1_ReadIR.ReadIR[2];
-						Usart1Send[4]=Remote1_ReadIR.ReadIR[3];
-	                    SendCount=1;
-	                    SBUF=Usart1Send[SendCount];
-
-	  }
-   
-
-  
-  return(KK);
+   if(irValue ==4) return(4);
+   else 
+      return(KK);
 }
 
 

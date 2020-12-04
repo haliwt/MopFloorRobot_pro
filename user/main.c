@@ -118,7 +118,7 @@ void InitSysclk(INT8U SYS)
 void main(void)
 {
 //    INT8U Self_Checking=0;
-	INT8U  KK,ik;
+	INT8U  KK,irk;
 	INT8U  First_step=0;
 	InitSysclk(1);
 
@@ -153,10 +153,12 @@ void main(void)
 	{
 	     KK=ReadKey();
 		// ik=CheckHandsetIR();
+		 SBUF = RightMoveMotorData.OutPWM;
+		 SBUF = LeftMoveMotorData.OutPWM;
 	     LedRedON();
 		 if(KK==0){
-				 KK= CheckHandsetIR();
-				 CheckMode(KK);
+				 irk= CheckHandsetIR();
+				 CheckMode(irk);
 				 CheckGround();
 				 CheckRun();
 		     }
