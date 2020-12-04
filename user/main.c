@@ -118,7 +118,7 @@ void InitSysclk(INT8U SYS)
 void main(void)
 {
 //    INT8U Self_Checking=0;
-	INT8U  KK;
+	INT8U  KK,ik;
 	INT8U  First_step=0;
 	InitSysclk(1);
 
@@ -151,16 +151,17 @@ void main(void)
 
 	while(1)
 	{
-	     KK= CheckHandsetIR();
-	     LedBlueON();
-		 if(KK==0xC0){
+	     KK=ReadKey();
+		// ik=CheckHandsetIR();
+	     LedRedON();
+		 if(KK==0){
 				 KK= CheckHandsetIR();
 				 CheckMode(KK);
 				 CheckGround();
 				 CheckRun();
 		     }
 			 else{
-			     KK=ReadKey();
+			    // 
 				 CheckMode(KK);
 				 CheckGround();
 				 CheckRun(); 
