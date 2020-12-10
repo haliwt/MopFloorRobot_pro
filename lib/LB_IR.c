@@ -146,16 +146,19 @@ void CheckXReadIR(ReadIRByte *P)
 					 }
 					 if(ReadIR_cnt==4)
 					 {
-			    	    Usart1Send[0]=4;
+			    	    #if 0
+						 Usart1Send[0]=4;
 	                    Usart1Send[1]=P->ReadIR[0];
 						Usart1Send[2]=P->ReadIR[1];
 						Usart1Send[3]=P->ReadIR[2];
 						Usart1Send[4]=P->ReadIR[3];
 	                    SendCount=1;
 	                    SBUF=Usart1Send[SendCount];
+						 #endif 
 						ReadIR_cnt=0;
 						FristCodeflag=0;
 						P->ReadIRFlag=3;
+						 #if 0
 						if(P->ReadIR[0]==0x01){
 							if(P->ReadIR[1]==0xFE)
 						    {
@@ -175,7 +178,8 @@ void CheckXReadIR(ReadIRByte *P)
 								   
 							} 
 						}
-						}   
+						} 
+                       #endif 						
 						
 
 
@@ -209,6 +213,41 @@ INT8U CheckHandsetIR()
 	
 
    CheckXReadIR(&Remote1_ReadIR);
+	if(Remote1_ReadIR.ReadIRFlag==3){
+		Remote1_ReadIR.ReadIRFlag=0;
+		#if 0
+		Usart1Send[0]=4;
+		Usart1Send[1]=Remote1_ReadIR.ReadIR[0];
+		Usart1Send[2]=Remote1_ReadIR.ReadIR[1];
+		Usart1Send[3]=Remote1_ReadIR.ReadIR[2];
+		Usart1Send[4]=Remote1_ReadIR.ReadIR[3];
+		SendCount=1;
+		SBUF=Usart1Send[SendCount];
+		#endif 
+		
+		if(Remote1_ReadIR.ReadIR[0]==0x01){
+							if(Remote1_ReadIR.ReadIR[1]==0xFE)
+						    {
+							
+							if(Remote1_ReadIR.ReadIR[2]==0xC0){
+								   RightMoveMotorData.RightAdjustWheel++;
+								  if(RightMoveMotorData.RightAdjustWheel >5)
+									  RightMoveMotorData.RightAdjustWheel=0;
+								      SBUF = RightMoveMotorData.RightAdjustWheel;
+								      irValue =4; //right 
+								      
+							}
+							 if(Remote1_ReadIR.ReadIR[2]==0x80){
+								  LeftMoveMotorData.LeftAdjustWheel++;
+								  if(LeftMoveMotorData.LeftAdjustWheel>5)
+									  LeftMoveMotorData.LeftAdjustWheel=0;
+								      SBUF = LeftMoveMotorData.LeftAdjustWheel;
+								      irValue =5 ; //left 
+								   
+							} 
+						}
+						} 
+	}
 
    if(irValue ==4 || irValue==5) return(4);
    else 

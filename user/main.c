@@ -148,13 +148,14 @@ void main(void)
 	Step=0;
 
 	Voltage=840;
-
+LeftMoveMotorData.LeftAdjustWheel=0;
+RightMoveMotorData.RightAdjustWheel=0;
 	while(1)
 	{
 	     KK=ReadKey();
 		// ik=CheckHandsetIR();
-		 SBUF = LeftMoveMotorData.LeftAdjustWheel;
-		 SBUF = RightMoveMotorData.RightAdjustWheel;
+		// SBUF = LeftMoveMotorData.LeftAdjustWheel;
+		// SBUF = RightMoveMotorData.RightAdjustWheel;
 	     LedRedON();
 		 if(KK==0){
 				 irk= CheckHandsetIR();
