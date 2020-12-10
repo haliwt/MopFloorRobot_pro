@@ -652,7 +652,7 @@ void CheckRightMotorSpeed(void)
  					if(RightMoveMotorData.OutPWM>0xfb)
 						RightMoveMotorData.OutPWM=0xfb;
 					else{
-						RightMoveMotorData.OutPWM=RightMoveMotorData.OutPWM+(LeftMoveMotorData.RightAdjustWheel+4);//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
+						RightMoveMotorData.OutPWM=RightMoveMotorData.OutPWM+(RightMoveMotorData.RightAdjustWheel+4);//4WT.EDIT //RightMoveMotorData.OutPWM+=4;		          
 						//SBUF = RightMoveMotorData.OutPWM;
 					   }
 					}

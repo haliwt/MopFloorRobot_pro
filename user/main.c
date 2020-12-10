@@ -153,8 +153,8 @@ void main(void)
 	{
 	     KK=ReadKey();
 		// ik=CheckHandsetIR();
-		 SBUF = RightMoveMotorData.OutPWM;
-		 SBUF = LeftMoveMotorData.OutPWM;
+		 SBUF = LeftMoveMotorData.LeftAdjustWheel;
+		 SBUF = RightMoveMotorData.RightAdjustWheel;
 	     LedRedON();
 		 if(KK==0){
 				 irk= CheckHandsetIR();

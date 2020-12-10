@@ -55,8 +55,8 @@ typedef struct
 	INT8U  RightAdjustWheel;
 } MoveMotorData;
 
-KAKA_Motor_EXT MoveMotorData outdata LeftMoveMotorData;
-KAKA_Motor_EXT MoveMotorData outdata RightMoveMotorData;
+KAKA_Motor_EXT MoveMotorData  LeftMoveMotorData;
+KAKA_Motor_EXT MoveMotorData  RightMoveMotorData;
 KAKA_Motor_EXT void Init_MotorSpeed();
 KAKA_Motor_EXT void InitMotorIO(void);
 KAKA_Motor_EXT void InitMotorForward(void);
