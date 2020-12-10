@@ -161,16 +161,16 @@ void CheckXReadIR(ReadIRByte *P)
 						    {
 							
 							if(P->ReadIR[2]==0xC0){
-								   RightMoveMotorData.LeftAdjustWheel++;
-								  if(RightMoveMotorData.LeftAdjustWheel >5)
-									  RightMoveMotorData.LeftAdjustWheel=0;
+								   RightMoveMotorData.RightAdjustWheel++;
+								  if(RightMoveMotorData.RightAdjustWheel >5)
+									  RightMoveMotorData.RightAdjustWheel=0;
 								      irValue =4; //right 
 								      
 							}
 							else if(P->ReadIR[2]==0x80){
-								  RightMoveMotorData.RightAdjustWheel++;
-								  if(RightMoveMotorData.RightAdjustWheel>5)
-									  RightMoveMotorData.RightAdjustWheel=0;
+								  LeftMoveMotorData.LeftAdjustWheel++;
+								  if(LeftMoveMotorData.LeftAdjustWheel>5)
+									  LeftMoveMotorData.LeftAdjustWheel=0;
 								      irValue =5 ; //left 
 								   
 							} 
@@ -206,8 +206,7 @@ void CheckXReadIR(ReadIRByte *P)
 INT8U CheckHandsetIR()
 {
 	INT8U KK=0;
-	INT8U N=0;
-	INT8U M=0;
+	
 
    CheckXReadIR(&Remote1_ReadIR);
 
